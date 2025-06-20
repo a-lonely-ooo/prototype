@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Post</title>
+    <style>
+        body {
+            background-color: #808080;
+            color: #ffd700;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        .post-content {
+            margin-top: 20px;
+        }
+        .post-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .post-file {
+            margin-top: 20px;
+        }
+        a {
+            color: #ffd700;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #ffd700;
+            color: #808080;
+        }
+        #passwordPrompt {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid white;
+            border-radius: 5px;
+            background-color: #808080;
+            color: #ffd700;
+        }
+        button {
+            background-color: #ffd700;
+            color: #808080;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Shared Post</h1>
+        <div id="passwordPrompt">
+            <input type="password" id="passwordInput" placeholder="Enter password">
+            <button onclick="checkPassword()">Submit</button>
+        </div>
+        <div class="post-content" id="postContent" style="display: none;">
+            <div class="post-text" id="postText"></div>
+            <div class="post-file" id="postFile"></div>
+        </div>
+    </div>
+
+    <script>
+        // Function to get URL parameter
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Check password
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === "3907") { // Replace with your desired password
+                document.getElementById('passwordPrompt').style.display = 'none';
+                document.getElementById('postContent').style.display = 'block';
+                displayPost();
+            } else {
+                alert('Incorrect password!');
+            }
+        }
+
+        // Display the post
+        function displayPost() {
+            const postId = getUrlParameter('id');
+            if (!postId) {
+                document.getElementById('postContent').innerHTML = '<p>No post ID provided.</p>';
+                return;
+            }
+
+            const posts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
+            const post = posts[postId];
+
+            if (post) {
+                if (post.text) {
+                    document.getElementById('postText').innerText = post.text;
+                }
+
+                if (post.fileData) {
+                    const fileLink = document.createElement('a');
+                    fileLink.href = post.fileData;
+                    fileLink.download = post.fileName || 'download';
+                    fileLink.innerText = 'Download File';
+                    document.getElementById('postFile').appendChild(fileLink);
+                }
+
+                if (!post.text && !post.fileData) {
+                    document.getElementById('postContent').innerHTML = '<p>This post contains no content.</p>';
+                }
+            } else {
+                document.getElementById('postContent').innerHTML = '<p>Post not found or has been deleted.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

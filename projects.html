@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jayansh - Projects</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow: hidden;
+      background-image: url('back.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: -1;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .navbar .home-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 1em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .navbar .home-btn:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    .navbar .search-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar .search-container input {
+      padding: 8px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px 0 0 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 0.9em;
+      outline: none;
+    }
+
+    .navbar .search-container button {
+      padding: 8px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-left: none;
+      border-radius: 0 20px 20px 0;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .navbar .search-container button:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 100px 20px 60px 20px;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .project-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      text-align: left;
+      transition: transform 0.3s ease;
+      width: 100%;
+    }
+
+    .project-item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+        .project-item h3 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: #00c6ff;
+    }
+
+        .project-item h1 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: #00c6ff;
+    }
+
+    .project-item h2 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: #00c6ff;
+    }
+
+    .project-item p {
+      font-size: 1em;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .project-item img {
+      max-width: 450px;
+      max-height: 300px;
+      width: auto;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      cursor: pointer;
+    }
+
+    .project-item a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 1em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .project-item a:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    /* Custom styling for Discuss a Project link */
+    .discuss-project {
+      color: #00c6ff; /* Dark text color for contrast */
+      text-decoration: none; /* Remove underline */
+      text-align: center; /* Center the text inside the button */
+    }
+
+    .discuss-project:hover {
+      color: #333; /* Keep text color on hover */
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 15px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9em;
+      color: #ccc;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .made-by {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-size: 0.8em;
+      color: #ccc;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .custom-ui-container {
+      position: fixed;
+      bottom: 30px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      font-size: 0.7em;
+      color: #ccc;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .custom-ui-container.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .custom-ui-text {
+      margin-right: 8px;
+    }
+
+    .custom-ui-btn {
+      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #ccc;
+      font-size: 0.7em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+    }
+
+    .custom-ui-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Lightbox styles for viewing images */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2em;
+      color: #fff;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: #00c6ff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <a href="main.html" class="home-btn">Home</a>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search projects..." />
+      <button onclick="searchProjects()">Search</button>
+    </div>
+  </div>
+
+  <div class="overlay"></div>
+
+  <!-- Content -->
+  <div class="container" id="projectContainer">
+    <div class="card">
+      <h1>My Projects</h1>
+      <div class="project-list" id="projectList">
+        <!-- Sample Project 1 -->
+        <div class="project-item">
+          <h1>Worm AI (Under Development)</h1>
+          <h4>Image Generation</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj1.png" alt="Worm AI" onclick="openLightbox(this.src)" />
+          <h4>Original Developer</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj2.png" alt="Worm AI" onclick="openLightbox(this.src)" />
+          <h4>Smart and Intelligent</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj3.png" alt="Worm AI" onclick="openLightbox(this.src)" />
+          <h4>Simple and easy UI</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj4.png" alt="Worm AI" onclick="openLightbox(this.src)" />
+          <img src="proj5.png" alt="Worm AI" onclick="openLightbox(this.src)" />
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <h2>Credits</h2>
+          <p>Jayansh aka a_lonely_ooo</p>
+          <h2>Laguages</h2>
+          <p>• backend: Pure Python</p>
+          <p>• Frontend: html, JavaScript, CSS</p>
+          <h2>Nature</h2>
+          <p>Have Multiple and relative Nature, Can interact with user easily</p>
+          <p>Have some attitude and can use bad words😑 in some scenerios</p>
+          <h2>Webpage</h2>
+          <p>Webpage will be deployed soon</p>
+          <p>Chatbot is still under developement</p>
+          <h2>Features</h2>
+          <p>• Voice chat (being added)</p>
+          <p>• AI Chatbot</p>
+          <p>• Image generation(Pollination)</p>
+          <hr style="border: none; height: 2px; background-color: #00c6ff; margin-top: 10px;">
+  <h2>Disclamer:</h2>
+  <h4>This tool/video does not promote or contain any illegal, harmful, or misleading content. It is strictly for educational and informational purposes only. Viewer discretion is advised.</h4>
+   <hr style="border: none; height: 2px; background-color: lch(100% 0.01 296.81); margin-top: 10px;">
+    <h2>Copyright © a_lonely_ooo</h2>
+ 
+  <h4>All rights reserved.
+Created by: <b>Jayansh</b>
+
+</h4>
+          <a href="https://github.com/a-lonely-ooo/Worm-gpt" target="_blank">View Project</a>
+        </div>
+      
+        <!-- Add more projects here -->
+         <!-- Sample Project 2 -->
+        <div class="project-item">
+          <h1>NetSnare(Under developement)</h1>
+          <h4>Unique UI Theme</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj6.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h4>Unique UI theme</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj7.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h4>Easy Tunneling</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj8.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h4>Working Link and Info Gathering</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj9.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h4>Perfect Webpages spoofs</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj10.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h4>No Data loss</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="proj11.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <img src="proj12.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+
+
+          <h1>NetSnare Demo Video</h1>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+  <video width="100%" controls>
+
+    <source src="demo.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+         <h2>Phishing Tool</h2>
+
+          <p>• A powerfull automatic Phishing tool</p>
+          <p>• It have more than 51 website templates</p>
+          <p>• Have 3 methods of tunneling: Cloudflare, localxpose(token required), localtunnel</p>
+          <p>• Fully coded in pyython, css, html and shell</p>
+          <p>• Working tunneling</p>
+          <h2>Languages</h2>
+
+          <p>• html</p>
+          <p>• css</p>
+          <p>• python</p>
+          <p>• And mostly coded in <b>Shell</b></p>
+          <h2>Credits</h2>
+
+          <p>• Jayansh aka a_lonely_ooo</p>
+          <h2> Inspired by</h2>
+          
+          <p>• Anonphisher</p>
+          <p>Team termuxhackz (Only Inspired)</p>
+          <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <p>Design and UI of this tool is very unique</p>
+          <p>Based on the theme of hacking world</p>
+          <p>Fully working and most easy to handel tool on github</p>
+          <hr style="border: none; height: 2px; background-color: #00c6ff; margin-top: 10px;">
+  <h2>Disclamer:</h2>
+  <h4>This tool/video does not promote or contain any illegal, harmful, or misleading content. It is strictly for educational and informational purposes only. Viewer discretion is advised.</h4>
+   <hr style="border: none; height: 2px; background-color: lch(100% 0.01 296.81); margin-top: 10px;">
+    <h2>Copyright © a_lonely_ooo</h2>
+ 
+  <h4>All rights reserved.
+Created by: <b>Jayansh</b>
+
+</h4>
+
+          <a href="https://github.com/a-lonely-ooo/NetSnare" target="_blank">View Project</a>
+        </div>
+     
+
+     
+    <!-- Sample Project 3 -->
+        <div class="project-item">
+          <h1>Weblookup</h1>
+          <h4>Easy And Uniques Design</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="13.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <img src="14.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <img src="15.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h2>Usage</h2>
+          <p>• A automatic website lookup tool</p>
+          <p>• Gives as much deatils as it can about the websites</p>
+          <p>• Info like: Ip, port, cookies, expiry date, and many details if possible</p>
+          <p>• Does not give any type of illegal and unethical information all information is from open source</p>
+          <h2>Languages</h2>
+          <p>Pure Python</p>
+          <h2>Credits</h2>
+          <p> Jayansh aka a_lonely_ooo</p>
+          <h1>How to use</h1>
+          <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <h2>Termux Users</h2>
+          <p>$ apt update && upgrade -y</p> 
+          <p>$ pkg install python && python3</p>
+          <p>$ git clone https://github.com/a-lonely-ooo/weblookup.git</p>
+          <p>$ cd weblookup</p>
+          <p>$ pip install -r requirements.txt</p>
+          <p>$ python weblookup.py</p>
+          <h2>Linux users</h2>
+          <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <p>$ apt update && upgrade -y</p>
+          <p>$ git clone https://github.com/a-lonely-ooo/weblookup.git</p>
+          <p>$ cd weblookup</p>
+          <p>$ apt install python</p>
+          <p>$ pip install -r requirements.txt</p>
+          <p>$ python weblookup.py</p>
+          <h2>For other devices</h2>
+        <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+        <p>• Just download the code from the repo</p>
+        <p>• Open in any Code editor</p>
+        <p>• install requirements and run the python file</p>
+        <hr style="border: none; height: 2px; background-color: #00c6ff; margin-top: 10px;">
+  <h2>Disclamer:</h2>
+  <h4>This tool/video does not promote or contain any illegal, harmful, or misleading content. It is strictly for educational and informational purposes only. Viewer discretion is advised.</h4>
+   <hr style="border: none; height: 2px; background-color: lch(100% 0.01 296.81); margin-top: 10px;">
+    <h2>Copyright © a_lonely_ooo</h2>
+ 
+  <h4>All rights reserved.
+Created by: <b>Jayansh</b>
+
+</h4>
+          <a href="https://github.com/a-lonely-ooo/weblookup" target="_blank">View Project</a>
+        </div>
+
+        <!-- Sample Project 4 -->
+        <div class="project-item">
+          <h1>IFSC lookup</h1>
+          <h4>Easy And Uniques Design</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="16.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h2>Usage</h2>
+          <p>• A automatic ifsc lookup tool</p>
+          <p>• Gives as much deatils as it can about the IFSC codes</p>
+          <p>• Info like: address, name, nearest branch, bank etc...</p>
+          <p>• Does not give any type of illegal and unethical information all information is from open source</p>
+          <h2>Languages</h2>>
+          <p>Pure Python</p>
+          <h2>Credits</h2>
+          <p> Jayansh aka a_lonely_ooo</p>
+          <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <p>Use it against Scammers😈</p>
+          <hr style="border: none; height: 2px; background-color: #00c6ff; margin-top: 10px;">
+  <h2>Disclamer:</h2>
+  <h4>This tool/video does not promote or contain any illegal, harmful, or misleading content. It is strictly for educational and informational purposes only. Viewer discretion is advised.</h4>
+   <hr style="border: none; height: 2px; background-color: lch(100% 0.01 296.81); margin-top: 10px;">
+    <h2>Copyright © a_lonely_ooo</h2>
+ 
+  <h4>All rights reserved.
+Created by: <b>Jayansh</b>
+
+</h4>
+          <a href="https://github.com/a-lonely-ooo/ifsclookup" target="_blank">View Project</a>
+        </div>
+
+        <!-- Sample Project 4 -->
+        <div class="project-item">
+          <h1>Instagram lookup</h1>
+          <h4>Easy And Uniques Design</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="17.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h2>Usage</h2>
+          <p>• A automatic Instagram username lookup tool</p>
+          <p>• Gives as much deatils as it can about the Username </p>
+          <p>• Info like: Bio, Name, latest post, lint to DP etx...</p>
+          <p>• Does not give any type of illegal and unethical information all information is from open source</p>
+          <h2>Languages</h2>>
+          <p>Pure Python</p>
+          <h2>Credits</h2>
+          <p> Jayansh aka a_lonely_ooo</p>
+          <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <p>Use it I you dont want to download Instagram So your MOM doesn't beat you</p>
+          <hr style="border: none; height: 2px; background-color: #00c6ff; margin-top: 10px;">
+  <h2>Disclamer:</h2>
+  <h4>This tool/video does not promote or contain any illegal, harmful, or misleading content. It is strictly for educational and informational purposes only. Viewer discretion is advised.</h4>
+   <hr style="border: none; height: 2px; background-color: lch(100% 0.01 296.81); margin-top: 10px;">
+    <h2>Copyright © a_lonely_ooo</h2>
+ 
+  <h4>All rights reserved.
+Created by: <b>Jayansh</b>
+
+</h4>
+          <a href="https://github.com/a-lonely-ooo/Instagram-username-lookup" target="_blank">View Project</a>
+        </div>
+
+         <!-- Sample Project 3 -->
+        <div class="project-item">
+          <h1>Keylogger</h1>
+          <h4>Target's view</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+          <img src="18.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h4>Admin's view</h4>
+           <hr style="border: none; height: 2px; background-color: white; margin-top: 10px;">
+           <img src="19.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+           <img src="20.png" alt="Python Automation Bot" onclick="openLightbox(this.src)" />
+          <h2>Usage</h2>
+          <p>• A powerfull and easy to use Keylogger</p>
+          <p>• Logs every key, mouse button, cursor cords and clipboard and saves all data</p>
+          <p>• Info like: Ip, port, cookies, expiry date, and many details if possible</p>
+          <p>• Not for unethical and illegal use</p>
+          <h2>Languages</h2>
+          <p>Pure Python</p>
+          <h2>Credits</h2>
+          <p> Jayansh aka a_lonely_ooo</p>
+          <h1>How to use</h1>
+<video width="100%" controls>
+
+    <source src="https://youtu.be/TXoe9PtQOL0" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <hr style="border: none; height: 2px; background-color: #00c6ff; margin-top: 10px;">
+  <h2>Disclamer:</h2>
+  <h4>This tool/video does not promote or contain any illegal, harmful, or misleading content. It is strictly for educational and informational purposes only. Viewer discretion is advised.</h4>
+   <hr style="border: none; height: 2px; background-color: lch(100% 0.01 296.81); margin-top: 10px;">
+    <h2>Copyright © a_lonely_ooo</h2>
+ 
+  <h4>All rights reserved.
+Created by: <b>Jayansh</b></h4>
+<a href="https://github.com/a-lonely-ooo/keylogger" target="_blank">View Project</a>
+</div>
+
+
+         <a href="https://t.me/a_lonely_ooo" class="project-item discuss-project" style="display: inline-block; margin-top: 30px;">Connect with me</a>
+    </div>
+
+    <footer>© 2025 @a_lonely_ooo. All rights reserved.</footer>
+  </div>
+
+  <!-- Made By -->
+  <div class="made-by">Made by @a_lonely_ooo</div>
+
+  <!-- Custom UI Container -->
+  <div class="custom-ui-container" id="customUiContainer">
+    <span class="custom-ui-text">If you also want to make your custom Page</span>
+    <a href="https://t.me/a_lonely_ooo" target="_blank" class="custom-ui-btn">Click me</a>
+  </div>
+
+  <!-- Lightbox for viewing images -->
+  <div class="lightbox" id="lightbox">
+    <span class="close-btn" onclick="closeLightbox()">×</span>
+    <img id="lightbox-img" src="" alt="Lightbox Image" />
+  </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('projectContainer');
+    const customUiContainer = document.getElementById('customUiContainer');
+
+    // Scroll detection for custom UI container
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight;
+      const clientHeight = container.clientHeight;
+      // Show container when scrolled to bottom (within 10px)
+      if (scrollHeight - scrollTop - clientHeight < 10) {
+        customUiContainer.classList.add('visible');
+      } else {
+        customUiContainer.classList.remove('visible');
+      }
+    });
+  });
+
+  // Lightbox functionality
+  function openLightbox(src) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    lightboxImg.src = src;
+    lightbox.classList.add('active');
+  }
+
+  function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.classList.remove('active');
+  }
+
+  // Close lightbox when clicking outside the image
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target.id !== 'lightbox-img') {
+      closeLightbox();
+    }
+  });
+
+  // Search functionality
+  function searchProjects() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const projectList = document.getElementById('projectList');
+    const projects = projectList.getElementsByClassName('project-item');
+
+    for (let i = 0; i < projects.length; i++) {
+      const project = projects[i];
+      const title = project.getElementsByTagName('h2')[0].textContent.toLowerCase();
+      const description = project.getElementsByTagName('p')[0].textContent.toLowerCase();
+
+      if (title.includes(input) || description.includes(input)) {
+        project.style.display = '';
+      } else {
+        project.style.display = 'none';
+      }
+    }
+  }
+
+  // Trigger search on Enter key
+  document.getElementById('searchInput').addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+      searchProjects();
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jayansh - Tools</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('back.jpg') no-repeat center center/cover;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 60px 20px;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .home-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      padding: 8px 15px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 0.9em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #00c6ff;
+      z-index: 1000;
+    }
+
+    .home-btn:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 15px;
+      background: #ffffff;
+      border: 2px solid #00c6ff;
+      border-radius: 20px;
+      color: #00c6ff;
+      font-size: 0.9em;
+      font-weight: normal;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 5px rgba(0, 198, 255, 0.5);
+      cursor: pointer;
+    }
+
+    .filter-btn:hover {
+      background: #e6f7ff;
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(0, 198, 255, 0.7);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      color: white;
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .filter-btn.active:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    .category-select {
+      padding: 8px 30px 8px 15px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 0.9em;
+      font-weight: normal;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 5px #00c6ff;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,10" style="fill:%23ffffff;"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 10px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    .category-select:hover, .category-select:focus {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px #00c6ff;
+      outline: none;
+    }
+
+    .category-select option {
+      background: rgba(0, 0, 0, 0.9);
+      color: #ffffff;
+      font-size: 1em;
+      padding: 10px;
+    }
+
+    .category-select option:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .search-bar {
+      padding: 8px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      color: #ccc;
+      font-size: 0.9em;
+      font-weight: normal;
+      transition: all 0.3s ease;
+      width: 200px;
+    }
+
+    .search-bar:hover, .search-bar:focus {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    .search-bar::placeholder {
+      color: #ccc;
+      opacity: 0.7;
+    }
+
+    .course-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .course {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .course:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .course h2 {
+      font-size: 1.5em;
+      color: #00c6ff;
+      margin: 0 0 10px;
+    }
+
+    .course p {
+      font-size: 1em;
+      color: #fff;
+      margin: 0 0 10px;
+      line-height: 1.6;
+    }
+
+    .course .price {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00c6ff;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      justify-content: center;
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      width: 80%;
+      max-width: 600px;
+      position: relative;
+      color: #fff;
+      text-align: center;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-content h2 {
+      font-size: 1.5em;
+      color: #00c6ff;
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      font-size: 1em;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .modal-content img, .modal-content video {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: block;
+    }
+
+    .modal-content .price {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00c6ff;
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .modal-buttons button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .buy-btn {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .buy-btn:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    .cart-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    .cart-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .close:hover {
+      color: lch(74.58% 44.77 241.61);
+    }
+
+    .contact-section {
+      position: fixed;
+      bottom: 30px;
+      right: 10px;
+      text-align: right;
+      z-index: 10;
+    }
+
+    .contact-section p {
+      font-size: 0.8em;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+
+    .social-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .social-btn {
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      color: #ccc;
+      font-size: 0.7em;
+      font-weight: normal;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 15px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9em;
+      color: lch(74.58% 44.77 241.61);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .made-by {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-size: 0.8em;
+      color: #ccc;
+      z-index: 10;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Image -->
+  <div class="background"></div>
+  <div class="overlay"></div>
+
+  <!-- Home Button -->
+  <a href="main.html" class="home-btn">Home</a>
+
+  <!-- Content -->
+  <div class="container">
+    <div class="card">
+      <h1>Our Tools</h1>
+      <!-- Filter Buttons -->
+      <div class="filter-container">
+        <button class="filter-btn active" data-filter="all" onclick="toggleFilter('all')">All</button>
+        <button class="filter-btn" data-filter="free" onclick="toggleFilter('free')">Free</button>
+        <button class="filter-btn" data-filter="paid" onclick="toggleFilter('paid')">Paid</button>
+        <select class="category-select" onchange="updateCategoryFilter(this.value)">
+          <option value="all">All Categories</option>
+          <option value="ransomware">Ransomware</option>
+          <option value="rat">Rat</option>
+          <option value="methods">Methods</option>
+          <option value="bundle">Bundle</option>
+          <option value="bomber">Bomber</option>
+          <option value="ddos">DDOS</option>
+        </select>
+        <input type="text" class="search-bar" placeholder="Search tools..." oninput="updateSearchFilter(this.value)">
+      </div>
+      <div class="course-list">
+        <!-- Tool 1 -->
+        <div class="course" onclick="openModal('modal1')" data-price="free" data-category="bundle">
+          <h2>409+ Termux and Linux Tools</h2>
+          <p>Best Termux and Linux tools for hacking and penetration</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 2 -->
+        <div class="course" onclick="openModal('modal2')" data-price="free" data-category="other">
+          <h2>CCTV Camera Hack Tool</h2>
+          <p>Hack CCTV camera by this tool</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 3 -->
+        <div class="course" onclick="openModal('modal3')" data-price="free" data-category="other">
+          <h2>Zip File Password Cracking Tool</h2>
+          <p>Crack Any Zip File Password</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 4 -->
+        <div class="course" onclick="openModal('modal4')" data-price="free" data-category="methods">
+          <h2>Caller ID Spoofing</h2>
+          <p>Call anyone by any number you want</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 5 -->
+        <div class="course" onclick="openModal('modal5')" data-price="free" data-category="bundle">
+          <h2>Top 21 Wifi Hacking Tools</h2>
+          <p>Hack Wifi By these 21 tools</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 6 -->
+        <div class="course" onclick="openModal('modal6')" data-price="free" data-category="other">
+          <h2>Burpsuite</h2>
+          <p>Exploit any Website, Bypass Any OTP, Do anything in the website you want by this tool</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 7 -->
+        <div class="course" onclick="openModal('modal7')" data-price="free" data-category="other">
+          <h2>Whatsapp Ban Tool</h2>
+          <p>Ban Whatsapp Id/Number of Anyone...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 8 -->
+        <div class="course" onclick="openModal('modal8')" data-price="free" data-category="bomber">
+          <h2>Whatsapp Bomber</h2>
+          <p>Powerfull Whatsapp Bomber</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 9 -->
+        <div class="course" onclick="openModal('modal9')" data-price="paid" data-category="bundle ddos">
+          <h2>Paid Powerfull DDOS Tools</h2>
+          <p>DDOS is a technique used by hacker to Down or completely shutdown any website..</p>
+          <div class="price">Price: ₹999 for whole bundel</div>
+        </div>
+        <!-- Tool 10 -->
+        <div class="course" onclick="openModal('modal10')" data-price="free" data-category="other">
+          <h2>PDF Password Cracking Tool</h2>
+          <p>Crack any PDF Password</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 11 -->
+        <div class="course" onclick="openModal('modal11')" data-price="free" data-category="methods">
+          <h2>Youtube 4000 Watchtime</h2>
+          <p>Get 4000 watchtime hour on your channel easily</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 12 -->
+        <div class="course" onclick="openModal('modal12')" data-price="free" data-category="other">
+          <h2>Dark Web Osint Tool</h2>
+          <p>Access and learn the whole dark web by your system... Osint any website on darkweb easily*</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 13 -->
+        <div class="course" onclick="openModal('modal13')" data-price="paid" data-category="ddos">
+          <h2>EZRA DDOS TOOL</h2>
+          <p>Most Powerfull Israel DDOS tool, You can down gov. websites also by this tool.. | Use VM/RDP only</p>
+          <div class="price">Price: ₹1299</div>
+        </div>
+        <!-- Tool 14 -->
+        <div class="course" onclick="openModal('modal14')" data-price="free" data-category="other">
+          <h2>Telegram Unlimited Views Tool</h2>
+          <p>Get unlimited views on Telegram</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 15 -->
+        <div class="course" onclick="openModal('modal15')" data-price="free" data-category="other">
+          <h2>Location Tracking Tool</h2>
+          <p>Track Anyone's Location</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 16 -->
+        <div class="course" onclick="openModal('modal16')" data-price="free" data-category="other">
+          <h2>Website Source Code Tool</h2>
+          <p>Give you source code of any website you want</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 17 -->
+        <div class="course" onclick="openModal('modal17')" data-price="free" data-category="bundle">
+          <h2>30+ Spamming Tools</h2>
+          <p>Best spamming tools</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 18 -->
+        <div class="course" onclick="openModal('modal18')" data-price="free" data-category="other">
+          <h2>Wifi Hacking Tool</h2>
+          <p>Hack Anyone's wifi by this paid tool but i m giving for free</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 19 -->
+        <div class="course" onclick="openModal('modal19')" data-price="free" data-category="methods">
+          <h2>Find Number and Email of Any Instagram Account</h2>
+          <p>Find number and email of any instagram account</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 20 -->
+        <div class="course" onclick="openModal('modal20')" data-price="free" data-category="other">
+          <h2>Zeus Grabber Tool</h2>
+          <p>Multi-Function Domain Tool: Reverse IP, IP Generator, Domain-to-IP Conversion, Google Search Dork & SQli, Zone-H</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 21 -->
+        <div class="course" onclick="openModal('modal21')" data-price="free" data-category="other">
+          <h2>Malware Making Tool</h2>
+          <p>Master in Making malware</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 22 -->
+        <div class="course" onclick="openModal('modal22')" data-price="free" data-category="other">
+          <h2>Gateway Bypasser Tool</h2>
+          <p>Bypass any payment gateway</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 23 -->
+        <div class="course" onclick="openModal('modal23')" data-price="free" data-category="rat">
+          <h2>Crax Rat 6.7</h2>
+          <p>Best Rat for Beginner</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 24 -->
+        <div class="course" onclick="openModal('modal24')" data-price="paid" data-category="rat">
+          <h2>Crax Rat 7.4</h2>
+          <p>Best rat for intermediates</p>
+          <div class="price">Price: ₹799</div>
+        </div>
+        <!-- Tool 25 -->
+        <div class="course" onclick="openModal('modal25')" data-price="paid" data-category="rat">
+          <h2>Crax Rat 7.5 and 7.6</h2>
+          <p>Best professional and cashout rat</p>
+          <div class="price">Price: ₹1499</div>
+        </div>
+        <!-- Tool 26 -->
+        <div class="course" onclick="openModal('modal26')" data-price="paid" data-category="rat">
+          <h2>Pegauses Rat 4.2</h2>
+          <p>Best Paid rat</p>
+          <div class="price">Price: ₹299</div>
+        </div>
+        <!-- Tool 27 -->
+        <div class="course" onclick="openModal('modal27')" data-price="paid" data-category="rat">
+          <h2>Golden Eye</h2>
+          <p>Best pc rat for professional, Hack any windows pc by this</p>
+          <div class="price">Price: ₹1499</div>
+        </div>
+        <!-- Tool 28 -->
+        <div class="course" onclick="openModal('modal28')" data-price="free" data-category="rat">
+          <h2>G-700 Rat</h2>
+          <p>Most demnding Rat (Not tested thats why giving for free)</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 29 -->
+        <div class="course" onclick="openModal('modal29')" data-price="paid" data-category="rat">
+          <h2>G-700 Rat</h2>
+          <p>Most demanding Rat of 2024 and 2025</p>
+          <div class="price">Price: ₹5000</div>
+        </div>
+        <!-- Tool 30 -->
+        <div class="course" onclick="openModal('modal30')" data-price="free" data-category="rat">
+          <h2>Eagle Spy Rat</h2>
+          <p>A normal Rat</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 31 -->
+        <div class="course" onclick="openModal('modal31')" data-price="free" data-category="rat">
+          <h2>SkyWyder Rat</h2>
+          <p>Interesting Rat with unique UI</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 32 -->
+        <div class="course" onclick="openModal('modal32')" data-price="paid" data-category="rat">
+          <h2>L3MON Rat</h2>
+          <p>Best auto permission RAT</p>
+          <div class="price">Price: ₹499</div>
+        </div>
+        <!-- Tool 33 -->
+        <div class="course" onclick="openModal('modal33')" data-price="paid" data-category="rat">
+          <h2>Andromeda Rat</h2>
+          <p>Andromeda v4.5</p>
+          <div class="price">Price: ₹99</div>
+        </div>
+        <!-- Tool 34 -->
+        <div class="course" onclick="openModal('modal34')" data-price="paid" data-category="rat">
+          <h2>VIP RAT</h2>
+          <p>Customized version of crax rat but not powerfull than original</p>
+          <div class="price">Price: ₹199</div>
+        </div>
+        <!-- Tool 35 -->
+        <div class="course" onclick="openModal('modal35')" data-price="free" data-category="rat">
+          <h2>SpyMax Rat</h2>
+          <p>SpyMax rat v6.9</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 36 -->
+        <div class="course" onclick="openModal('modal36')" data-price="paid" data-category="ransomware">
+          <h2>Making Ransomware by Yourself</h2>
+          <p>Make your own ransomware</p>
+          <div class="price">Price: ₹899</div>
+        </div>
+        <!-- Tool 37 -->
+        <div class="course" onclick="openModal('modal37')" data-price="paid" data-category="ransomware bundle">
+          <h2>Big Ransomware Bundel of 2024 and 2025</h2>
+          <p>Best ransomware collection of 2025</p>
+          <div class="price">Price: ₹1299</div>
+        </div>
+        <!-- Tool 38 -->
+        <div class="course" onclick="openModal('modal38')" data-price="free" data-category="ransomware">
+          <h2>Android Locker Ransomware</h2>
+          <p>Ransomware</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 39 -->
+        <div class="course" onclick="openModal('modal39')" data-price="free" data-category="ransomware">
+          <h2>Sauron Locker Ransomware</h2>
+          <p>Ransomware</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 40 -->
+        <div class="course" onclick="openModal('modal40')" data-price="free" data-category="ransomware">
+          <h2>Prince Ransomware</h2>
+          <p>Ransomware</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 41 -->
+        <div class="course" onclick="openModal('modal41')" data-price="free" data-category="ransomware">
+          <h2>NoCry Ransomware</h2>
+          <p>Ransomware</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Tool 42 -->
+        <div class="course" onclick="openModal('modal42')" data-price="free" data-category="ransomware">
+          <h2>Android Locker Ransomware</h2>
+          <p>Ransomware</p>
+          <div class="price">Price: Free</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal" id="modal1">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal1')">×</span>
+      <h2>409+ Termux and Linux Tools</h2>
+      <p>Best Termux and Linux tools for hacking and penetration</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('409+ Termux and Linux Tools', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('409+ Termux and Linux Tools', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal2">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal2')">×</span>
+      <h2>CCTV Camera Hack Tool</h2>
+      <p>Hack CCTV camera by this tool</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('CCTV Camera Hack Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('CCTV Camera Hack Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal3">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal3')">×</span>
+      <h2>Zip File Password Cracking Tool</h2>
+      <p>Crack Any Zip File Password</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Zip File Password Cracking Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Zip File Password Cracking Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal4">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal4')">×</span>
+      <h2>Caller ID Spoofing</h2>
+      <p>Call anyone by any number you want</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Caller ID Spoofing', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Caller ID Spoofing', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal5">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal5')">×</span>
+      <h2>Top 21 Wifi Hacking Tools</h2>
+      <p>Hack Wifi By these 21 tools</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Top 21 Wifi Hacking Tools', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Top 21 Wifi Hacking Tools', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal6">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal6')">×</span>
+      <h2>Burpsuite</h2>
+      <p>Exploit any Website, Bypass Any OTP, Do anything in the website you want by this tool</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Burpsuite', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Burpsuite', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal7">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal7')">×</span>
+      <h2>Whatsapp Ban Tool</h2>
+      <p>Ban Whatsapp Id/Number of Anyone...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Whatsapp Ban Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Whatsapp Ban Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal8">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal8')">×</span>
+      <h2>Whatsapp Bomber</h2>
+      <p>Powerfull Whatsapp Bomber</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Whatsapp Bomber', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Whatsapp Bomber', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal9">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal9')">×</span>
+      <h2>Paid Powerfull DDOS Tools</h2>
+      <p>DDOS is a technique used by hacker to Down or completely shutdown any website..</p>
+      <div class="price">Price: ₹999 for whole bundel</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Paid Powerfull DDOS Tools', 999)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Paid Powerfull DDOS Tools', 999)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal10">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal10')">×</span>
+      <h2>PDF Password Cracking Tool</h2>
+      <p>Crack any PDF Password</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('PDF Password Cracking Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('PDF Password Cracking Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal11">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal11')">×</span>
+      <h2>Youtube 4000 Watchtime</h2>
+      <p>Get 4000 watchtime hour on your channel easily</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Youtube 4000 Watchtime', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Youtube 4000 Watchtime', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal12">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal12')">×</span>
+      <h2>Dark Web Osint Tool</h2>
+      <p>Access and learn the whole dark web by your system... Osint any website on darkweb easily*</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Dark Web Osint Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Dark Web Osint Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal13">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal13')">×</span>
+      <h2>EZRA DDOS TOOL</h2>
+      <p>Most Powerfull Israel DDOS tool, You can down gov. websites also by this tool.. | Use VM/RDP only</p>
+      <div class="price">Price: ₹1299</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('EZRA DDOS TOOL', 1299)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('EZRA DDOS TOOL', 1299)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal14">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal14')">×</span>
+      <h2>Telegram Unlimited Views Tool</h2>
+      <p>Get unlimited views on Telegram</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Telegram Unlimited Views Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Telegram Unlimited Views Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal15">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal15')">×</span>
+      <h2>Location Tracking Tool</h2>
+      <p>Track Anyone's Location</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Location Tracking Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Location Tracking Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal16">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal16')">×</span>
+      <h2>Website Source Code Tool</h2>
+      <p>Give you source code of any website you want</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Website Source Code Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Website Source Code Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal17">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal17')">×</span>
+      <h2>30+ Spamming Tools</h2>
+      <p>Best spamming tools</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('30+ Spamming Tools', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('30+ Spamming Tools', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal18">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal18')">×</span>
+      <h2>Wifi Hacking Tool</h2>
+      <p>Hack Anyone's wifi by this paid tool but i m giving for free</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Wifi Hacking Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Wifi Hacking Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal19">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal19')">×</span>
+      <h2>Find Number and Email of Any Instagram Account</h2>
+      <p>Find number and email of any instagram account</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Find Number and Email of Any Instagram Account', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Find Number and Email of Any Instagram Account', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal20">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal20')">×</span>
+      <h2>Zeus Grabber Tool</h2>
+      <p>Multi-Function Domain Tool: Reverse IP, IP Generator, Domain-to-IP Conversion, Google Search Dork & SQli, Zone-H</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Zeus Grabber Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Zeus Grabber Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal21">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal21')">×</span>
+      <h2>Malware Making Tool</h2>
+      <p>Master in Making malware</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Malware Making Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Malware Making Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal22">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal22')">×</span>
+      <h2>Gateway Bypasser Tool</h2>
+      <p>Bypass any payment gateway</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Gateway Bypasser Tool', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Gateway Bypasser Tool', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal23">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal23')">×</span>
+      <h2>Crax Rat 6.7</h2>
+      <p>Best Rat for Beginner</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Crax Rat 6.7', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Crax Rat 6.7', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal24">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal24')">×</span>
+      <h2>Crax Rat 7.4</h2>
+      <p>Best rat for intermediates</p>
+      <div class="price">Price: ₹799</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Crax Rat 7.4', 799)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Crax Rat 7.4', 799)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal25">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal25')">×</span>
+      <h2>Crax Rat 7.5 and 7.6</h2>
+      <p>Best professional and cashout rat</p>
+      <div class="price">Price: ₹1499</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Crax Rat 7.5 and 7.6', 1499)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Crax Rat 7.5 and 7.6', 1499)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal26">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal26')">×</span>
+      <h2>Pegauses Rat 4.2</h2>
+      <p>Best Paid rat</p>
+      <div class="price">Price: ₹299</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Pegauses Rat 4.2', 299)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Pegauses Rat 4.2', 299)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal27">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal27')">×</span>
+      <h2>Golden Eye</h2>
+      <p>Best pc rat for professional, Hack any windows pc by this</p>
+      <div class="price">Price: ₹1499</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Golden Eye', 1499)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Golden Eye', 1499)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal28">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal28')">×</span>
+      <h2>G-700 Rat</h2>
+      <p>Most demnding Rat (Not tested thats why giving for free)</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('G-700 Rat', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('G-700 Rat', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal29">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal29')">×</span>
+      <h2>G-700 Rat</h2>
+      <p>Most demanding Rat of 2024 and 2025</p>
+      <div class="price">Price: ₹5000</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('G-700 Rat', 5000)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('G-700 Rat', 5000)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal30">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal30')">×</span>
+      <h2>Eagle Spy Rat</h2>
+      <p>A normal Rat</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Eagle Spy Rat', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Eagle Spy Rat', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal31">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal31')">×</span>
+      <h2>SkyWyder Rat</h2>
+      <p>Interesting Rat with unique UI</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('SkyWyder Rat', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('SkyWyder Rat', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal32">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal32')">×</span>
+      <h2>L3MON Rat</h2>
+      <p>Best auto permission RAT</p>
+      <div class="price">Price: ₹499</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('L3MON Rat', 499)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('L3MON Rat', 499)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal33">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal33')">×</span>
+      <h2>Andromeda Rat</h2>
+      <p>Andromeda v4.5</p>
+      <div class="price">Price: ₹99</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Andromeda Rat', 99)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Andromeda Rat', 99)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal34">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal34')">×</span>
+      <h2>VIP RAT</h2>
+      <p>Customized version of crax rat but not powerfull than original</p>
+      <div class="price">Price: ₹199</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('VIP RAT', 199)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('VIP RAT', 199)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal35">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal35')">×</span>
+      <h2>SpyMax Rat</h2>
+      <p>SpyMax rat v6.9</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('SpyMax Rat', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('SpyMax Rat', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal36">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal36')">×</span>
+      <h2>Making Ransomware by Yourself</h2>
+      <p>Make your own ransomware</p>
+      <div class="price">Price: ₹899</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Making Ransomware by Yourself', 899)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Making Ransomware by Yourself', 899)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal37">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal37')">×</span>
+      <h2>Big Ransomware Bundel of 2024 and 2025</h2>
+      <p>Best ransomware collection of 2025</p>
+      <div class="price">Price: ₹1299</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Big Ransomware Bundel of 2024 and 2025', 1299)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Big Ransomware Bundel of 2024 and 2025', 1299)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal38">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal38')">×</span>
+      <h2>Android Locker Ransomware</h2>
+      <p>Ransomware</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Android Locker Ransomware', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Android Locker Ransomware', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal39">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal39')">×</span>
+      <h2>Sauron Locker Ransomware</h2>
+      <p>Ransomware</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Sauron Locker Ransomware', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Sauron Locker Ransomware', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal40">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal40')">×</span>
+      <h2>Prince Ransomware</h2>
+      <p>Ransomware</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Prince Ransomware', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Prince Ransomware', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal41">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal41')">×</span>
+      <h2>NoCry Ransomware</h2>
+      <p>Ransomware</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('NoCry Ransomware', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('NoCry Ransomware', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal42">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal42')">×</span>
+      <h2>Android Locker Ransomware</h2>
+      <p>Ransomware</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" onclick="buyNow('Android Locker Ransomware', 0)">Buy Now</button>
+        <button class="cart-btn" onclick="addToCart('Android Locker Ransomware', 0)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- Made By -->
+  <div class="made-by">Made by @a_lonely_ooo</div>
+
+  <footer>If You Want Any Course Or tuorial video related to any Tool check out the <b>Courses</b> Section</footer>
+
+  
+
+<script>
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let currentSearchTerm = '';
+
+  function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'flex';
+  }
+
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    const videos = modal.getElementsByTagName('video');
+    for (let video of videos) {
+      video.pause();
+    }
+    modal.style.display = 'none';
+  }
+
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`${name} has been added to your cart!`);
+  }
+
+  function buyNow(name, price) {
+    alert(`Proceeding to buy ${name} for ₹${price}...`);
+  }
+
+  function applyFilters() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const courses = document.querySelectorAll('.course');
+    const categorySelect = document.querySelector('.category-select');
+    const selectedCategory = categorySelect.value;
+    const searchTerm = currentSearchTerm.trim().toLowerCase();
+
+    const activePriceFilters = Array.from(buttons)
+      .filter(btn => btn.classList.contains('active'))
+      .map(btn => btn.getAttribute('data-filter'))
+      .filter(f => f !== 'all');
+
+    const isAllPriceActive = activePriceFilters.length === 0;
+
+    const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+    if (isAllPriceActive) {
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-filter') === 'all') {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    courses.forEach(course => {
+      const price = course.getAttribute('data-price');
+      const category = course.getAttribute('data-category');
+      const heading = course.querySelector('h2').textContent.toLowerCase();
+      const description = course.querySelector('p').textContent.toLowerCase();
+
+      const matchesPrice = isAllPriceActive ||
+        (activePriceFilters.includes('free') && price === 'free') ||
+        (activePriceFilters.includes('paid') && price === 'paid');
+
+      const matchesCategory = selectedCategory === 'all' || category.includes(selectedCategory);
+
+      const matchesSearch = !searchTerm || heading.includes(searchTerm) || description.includes(searchTerm);
+
+      course.style.display = matchesPrice && matchesCategory && matchesSearch ? 'block' : 'none';
+    });
+  }
+
+  function toggleFilter(filterType) {
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    if (filterType === 'all') {
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-filter') === 'all') {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    } else {
+      const currentButton = document.querySelector(`.filter-btn[data-filter="${filterType}"]`);
+      currentButton.classList.toggle('active');
+
+      const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+      allButton.classList.remove('active');
+    }
+
+    applyFilters();
+  }
+
+  function updateCategoryFilter(category) {
+    applyFilters();
+  }
+
+  function updateSearchFilter(searchTerm) {
+    currentSearchTerm = searchTerm;
+    applyFilters();
+  }
+</script>
+</body>
+</html>

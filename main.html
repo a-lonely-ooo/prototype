@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jayansh - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600&family=Montserrat:wght@400;600&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      overflow-x: hidden;
+      font-family: 'Roboto', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(6,0,16,0.9);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(#00c6ff, #0072ff);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,198,255,0.5);
+      transition: all 0.3s ease;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(#00e6ff, #00a2ff);
+      box-shadow: 0 0 15px rgba(0,230,255,0.7);
+    }
+    canvas#particles {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+    }
+    .overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,20,50,0.5)); 
+      z-index: -1;
+    }
+    .intro-section {
+      height: 100vh; display: flex; flex-direction: column; justify-content: center;
+      align-items: center; z-index: 10; position: relative;
+      background: radial-gradient(circle, rgba(0,198,255,0.3) 0%, rgba(0,20,50,0.5) 70%);
+      animation: pulse 6s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { background: radial-gradient(circle, rgba(0,198,255,0.3) 0%, rgba(0,20,50,0.5) 70%); }
+      50% { background: radial-gradient(circle, rgba(0,198,255,0.5) 0%, rgba(0,20,50,0.7) 70%); }
+    }
+    .rotating-text {
+      font-family: 'Montserrat', sans-serif; font-size: clamp(2rem, 5vw, 4rem);
+      color: #00d4ff; text-shadow: 0 0 15px #00d4ff, 0 0 30px #00d4ff; text-align: center;
+      z-index: 11;
+    }
+    .rotating-text span { 
+      display: inline-block; 
+      margin: 0 8px; 
+      transform-origin: center bottom;
+    }
+    .stepper-container {
+      width: 100%; max-width: 448px; background: rgba(18,18,18,0.9); border: 1px solid #333;
+      border-radius: 2rem; padding: 2rem; box-shadow: 0 0 20px rgba(0,212,255,0.4);
+      text-align: center; font-family: 'Roboto', sans-serif; display: none; opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .stepper-container.visible { display: block; opacity: 1; transform: scale(1); }
+    .stepper-container.fade-out { opacity: 0; transform: scale(0.8); }
+    .step-content { display: none; transition: opacity 0.4s ease; }
+    .step-content.active { display: block; opacity: 1; }
+    .step-indicators {
+      display: flex; justify-content: center; align-items: center; padding: 1rem 0;
+    }
+    .step-indicator {
+      width: 2rem; height: 2rem; border-radius: 50%; background: #333; color: #a3a3a3;
+      display: flex; justify-content: center; align-items: center; margin: 0 0.5rem;
+      font-size: 0.875rem; font-weight: 600; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .step-indicator.active { 
+      background: #00d4ff; 
+      color: #121212; 
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #00d4ff;
+    }
+    .step-indicator.complete { 
+      background: #ff4d9e; 
+      color: #121212; 
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #ff4d9e;
+    }
+    .step-connector {
+      height: 0.125rem; width: 2rem; background: #52525b; margin: 0 0.25rem;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .step-connector.complete { 
+      background: linear-gradient(90deg, #ff4d9e, #00d4ff);
+      box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+    }
+    .stepper-buttons {
+      display: flex; justify-content: space-between; margin-top: 2rem;
+    }
+    .stepper-btn {
+      padding: 0.5rem 1.25rem; border-radius: 9999px; cursor: pointer;
+      font-weight: 500; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+    .back-btn { 
+      background: none; color: #a3a3a3; border: none;
+      box-shadow: inset 0 0 0 1px #52525b;
+    }
+    .back-btn:hover { 
+      color: #f1f1f1; 
+      box-shadow: inset 0 0 0 1px #00d4ff, 0 0 15px rgba(0, 212, 255, 0.3);
+    }
+    .back-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+      transition: all 0.6s ease;
+    }
+    .back-btn:hover::before {
+      left: 100%;
+    }
+    .back-btn.disabled { opacity: 0.5; pointer-events: none; }
+    .next-btn { 
+      background: #00d4ff; 
+      color: #121212; 
+      border: none;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .next-btn:hover { 
+      background: #ff4d9e; 
+      box-shadow: 0 0 25px rgba(255, 77, 158, 0.7);
+      transform: translateY(-2px);
+    }
+    .next-btn:active { 
+      background: #7b3bff; 
+      transform: scale(0.98);
+    }
+    .next-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: translateX(-100%);
+    }
+    .next-btn:hover::after {
+      transform: translateX(100%);
+      transition: transform 0.6s ease;
+    }
+    .name-display {
+      position: fixed; top: 20px; right: 20px; font-family: 'Montserrat', sans-serif;
+      font-size: 1rem; color: #00c6ff; background: rgba(6,0,16,0.9); padding: 10px 18px;
+      border-radius: 12px; border: 1px solid #222; box-shadow: 0 0 15px rgba(0,198,255,0.4);
+      z-index: 1000; opacity: 0; transform: translateY(-20px);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .name-display:hover {
+      transform: translateY(0) scale(1.05);
+      box-shadow: 0 0 20px rgba(0,198,255,0.6);
+    }
+    .scroll-float {
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      height: 100vh; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 198, 255, 0.1) 100%);
+    }
+    .scroll-float.visible { display: flex; opacity: 1; }
+    .scroll-float.hide { opacity: 0; transform: translateY(-20px); pointer-events: none; }
+    .scroll-float-text {
+      font-size: clamp(2rem, 8vw, 6rem); font-weight: 600; text-align: center; 
+      font-family: 'Montserrat', sans-serif;
+      color: #00d4ff;
+      text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-float-text::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s ease;
+    }
+    .scroll-float:hover .scroll-float-text::after {
+      transform: scaleX(1);
+    }
+    .scroll-down-icon {
+      font-size: 2rem; margin-top: 20px; animation: bounce 1.6s infinite ease; color: #00d4ff;
+      transition: all 0.3s ease;
+    }
+    .scroll-float:hover .scroll-down-icon {
+      color: #00e6ff;
+      text-shadow: 0 0 10px rgba(0, 230, 255, 0.7);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+    .container {
+      padding-bottom: 140px; max-width: 1000px; margin: 0 auto; text-align: center;
+      padding-top: 100vh; display: none;
+      background: linear-gradient(to bottom, rgba(0, 20, 50, 0.3) 0%, rgba(0, 0, 0, 1) 100%);
+    }
+    .container.visible { display: block; }
+    .card { padding: 60px 20px; transform-origin: center top; }
+    h1 {
+      font-family: 'Montserrat', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); color: #fff;
+      text-shadow: 0 0 15px rgba(0, 198, 255, 0.7);
+      position: relative;
+    }
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #00c6ff, transparent);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+    h1:hover::after {
+      width: 200px;
+      opacity: 1;
+    }
+    .subtitle {
+      font-size: clamp(1rem, 2vw, 1.2rem); color: #fff; margin-top: 10px; 
+      font-family: 'Roboto', sans-serif;
+      opacity: 0.8;
+      transition: all 0.3s ease;
+    }
+    .subtitle:hover {
+      opacity: 1;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+    .dock {
+      position: fixed; 
+      bottom: 20px; 
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      display: flex;
+      gap: 0;
+      background: rgba(6,0,16,0.7); 
+      border: 1px solid rgba(0, 198, 255, 0.3);
+      padding: 10px 10px;
+      border-radius: 16px; 
+      backdrop-filter: blur(12px);
+      z-index: 9999; 
+      opacity: 0;
+      box-shadow: 0 8px 32px rgba(0, 198, 255, 0.2);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .dock.visible { 
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      gap: 18px;
+      padding: 14px 28px;
+    }
+    .dock-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(6,0,16,0.7);
+      border-radius: 16px;
+      z-index: -1;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .dock.visible .dock-bar {
+      transform: scaleX(1);
+    }
+    .dock-item {
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      color: white;
+      text-decoration: none; 
+      position: relative; 
+      padding: 8px;
+      transform: translateY(20px) scale(0.8);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .dock.visible .dock-item {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    .dock-item i { 
+      font-size: 22px; 
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .dock-item:hover i { 
+      transform: scale(1.2) translateY(-5px);
+      color: #00c6ff;
+      filter: drop-shadow(0 0 12px #00c6ff); 
+    }
+    .dock-label {
+      font-size: 10px; margin-top: 5px; background: #00c6ff; color: #000;
+      padding: 3px 8px; border-radius: 12px; white-space: nowrap; font-weight: 500;
+      position: absolute; top: -28px; opacity: 0; transform: translateY(10px);
+      pointer-events: none; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    .dock-item:hover .dock-label { 
+      opacity: 1; 
+      transform: translateY(0);
+    }
+    .bio-section {
+      max-width: 900px; margin: 80px auto; padding: 40px 20px; text-align: left;
+    }
+    .section-heading {
+      font-size: 2.2rem; margin-bottom: 20px; color: #00c6ff;
+      border-bottom: 1px solid #333; padding-bottom: 10px; min-height: 2.2rem;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    .section-heading::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00c6ff, #7b3bff);
+      transition: width 0.6s ease;
+    }
+    .section-heading:hover::after {
+      width: 100%;
+    }
+    .typing-container {
+      display: inline-block;
+      position: relative;
+    }
+    .typing-text {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .typing-cursor {
+      display: inline-block;
+      width: 0.15em;
+      height: 1em;
+      background: #00c6ff;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .content-item {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      will-change: transform, opacity;
+    }
+    .animate-in {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .bio-section img {
+      width: 140px; height: 140px; border-radius: 50%; border: 3px solid #00c6ff;
+      margin-bottom: 20px; object-fit: cover;
+      box-shadow: 0 0 25px rgba(0, 198, 255, 0.6);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .bio-section img:hover {
+      transform: scale(1.05) rotate(5deg);
+      box-shadow: 0 0 35px rgba(0, 198, 255, 0.8);
+    }
+    .bio-section p, .bio-section a:not(.contact a) {
+      font-size: 1.05rem; line-height: 1.6; margin: 10px 0; color: #ddd;
+      font-family: 'Roboto', sans-serif;
+      transition: all 0.3s ease;
+    }
+    .bio-section p:hover {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+    .skills, .languages, .experience, .contact { margin-top: 30px; }
+    .languages a {
+      display: inline-block; margin: 8px 12px; text-decoration: none; color: #00c6ff;
+      font-weight: 500;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+    .languages a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #00c6ff;
+      transition: width 0.3s ease;
+    }
+    .languages a:hover { 
+      color: #00e6ff; 
+      transform: translateY(-3px);
+    }
+    .languages a:hover::after {
+      width: 100%;
+    }
+    .languages img {
+      width: 28px; height: 28px; vertical-align: middle; margin-right: 8px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .languages a:hover img {
+      transform: scale(1.2) rotate(10deg);
+      filter: drop-shadow(0 0 8px rgba(0, 198, 255, 0.6));
+    }
+    .contact a {
+      margin: 0 10px; font-size: 1.6rem; color: #00c6ff;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: inline-block;
+      position: relative;
+    }
+    .contact a::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 50%;
+      background: rgba(0, 198, 255, 0.1);
+      transform: scale(0);
+      transition: transform 0.4s ease;
+      z-index: -1;
+    }
+    .contact a:hover { 
+      color: #00e6ff; 
+      transform: scale(1.2);
+    }
+    .contact a:hover::before {
+      transform: scale(1);
+    }
+    .projects-btn {
+      display: inline-block; margin-top: 20px; padding: 12px 24px; background: #00c6ff;
+      color: #000; border-radius: 25px; font-weight: 600; text-decoration: none;
+      box-shadow: 0 0 15px #00c6ff; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+    .projects-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: all 0.6s ease;
+    }
+    .projects-btn:hover {
+      background: #00e6ff; 
+      box-shadow: 0 0 25px #00e6ff;
+      transform: translateY(-3px);
+    }
+    .projects-btn:hover::before {
+      left: 100%;
+    }
+    .projects-btn:active {
+      transform: translateY(0);
+    }
+    footer {
+      text-align: center; padding: 20px 0; font-size: 0.9rem; color: #ddd;
+      position: relative; bottom: 0; width: 100%; font-family: 'Roboto', sans-serif;
+      background: rgba(6,0,16,0.7);
+      border-top: 1px solid rgba(0, 198, 255, 0.2);
+    }
+    footer span { 
+      color: #00c6ff;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    footer span::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #00c6ff;
+      transition: width 0.3s ease;
+    }
+    footer:hover span {
+      text-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
+    }
+    footer:hover span::after {
+      width: 100%;
+    }
+    @media (max-width: 600px) {
+      .scroll-float-text { font-size: clamp(1.5rem, 6vw, 4rem); }
+      .scroll-down-icon { font-size: 1.5rem; }
+      .container { padding-top: 90vh; padding-bottom: 120px; }
+      .card { padding: 40px 15px; }
+      .bio-section { padding: 30px 15px; margin: 60px auto; }
+      .section-heading { font-size: 1.8rem; }
+      .bio-section img { width: 120px; height: 120px; }
+      .dock { gap: 14px; padding: 10px 20px; }
+      .dock-item i { font-size: 20px; }
+      .dock-label { font-size: 9px; }
+      ::-webkit-scrollbar { width: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <div class="overlay"></div>
+  <div id="name-display" class="name-display"></div>
+  
+  <div class="intro-section" id="introSection">
+    <div id="rotating-text" class="rotating-text"></div>
+    <div id="stepper" class="stepper-container">
+      <div class="step-indicators" id="stepIndicators"></div>
+      <div class="step-content" id="step1">
+        <h2 style="font-size: 1.5rem; color: #00d4ff; text-shadow: 0 0 10px #00d4ff;">Hey There!</h2>
+        <p style="color: #ddd; margin-top: 0.5rem;">Welcome to my coding world!</p>
+      </div>
+      <div class="step-content" id="step2">
+        <h2 style="font-size: 1.5rem; color: #ff4d9e; text-shadow: 0 0 10px #ff4d9e;">Connect With Me</h2>
+        <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
+          <a href="https://instagram.com/a_lonely_ooo" target="_blank" style="color: #00d4ff; font-size: 1.5rem;" class="hover:scale-125 transition-all"><i class="fab fa-instagram"></i></a>
+          <a href="https://github.com/a_lonely_ooo" target="_blank" style="color: #00d4ff; font-size: 1.5rem;" class="hover:scale-125 transition-all"><i class="fab fa-github"></i></a>
+          <a href="https://twitter.com/a_lonely_ooo" target="_blank" style="color: #00d4ff; font-size: 1.5rem;" class="hover:scale-125 transition-all"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div class="step-content" id="step3">
+        <h2 style="font-size: 1.5rem; color: #7b3bff; text-shadow: 0 0 10px #7b3bff;">What's Your Name?</h2>
+        <input id="nameInput" placeholder="Type your name" style="width: 100%; margin-top: 1rem; padding: 0.75rem; color: #fff; background: rgba(18,18,18,0.9); border: 1px solid #00d4ff; border-radius: 0.5rem; outline: none; transition: all 0.3s ease;" />
+      </div>
+      <div class="step-content" id="step4">
+        <h2 style="font-size: 1.5rem; color: #00d4ff; text-shadow: 0 0 10px #00d4ff;">You're All Set!</h2>
+        <p style="color: #ddd; margin-top: 0.5rem;">Dive into my portfolio!</p>
+      </div>
+      <div class="stepper-buttons">
+        <button id="backBtn" class="stepper-btn back-btn disabled">Previous</button>
+        <button id="nextBtn" class="stepper-btn next-btn">Next</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="scroll-float" id="scrollIntro">
+    <div class="scroll-float-text">Scroll Down</div>
+    <div class="scroll-down-icon"><i class="fas fa-chevron-down"></i></div>
+  </div>
+  
+  <div class="container" id="mainContent">
+    <div class="card" id="mainCard">
+      <h1>Jayansh's Portfolio</h1>
+      <p class="subtitle">A prototype showcasing my projects & courses</p>
+    </div>
+    
+    <section class="bio-section">
+      <div class="section-block">
+        <h2 id="whoami-heading" class="section-heading" data-text="Who Am I?"></h2>
+        <div class="content">
+          <img src="file.jpg" alt="Jayansh Aryan" class="content-item">
+          <p class="content-item"><strong>Name:</strong> Jayansh Aryan</p>
+          <p class="content-item"><strong>DOB:</strong> 17th of June</p>
+          <p class="content-item"><strong>Nature:</strong> Extrovert | <strong>Gen:</strong> Z</p>
+          <p class="content-item"><strong>Hobbies:</strong> Gaming, Coding, Developing</p>
+        </div>
+      </div>
+      
+      <div class="section-block languages">
+        <h2 id="languages-heading" class="section-heading" data-text="Languages I Know"></h2>
+        <div class="content">
+          <a href="https://www.python.org" target="_blank" class="content-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">Python</a>
+          <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" class="content-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">HTML</a>
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" class="content-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">CSS</a>
+          <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" class="content-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS">JavaScript</a>
+          <a href="https://go.dev/" target="_blank" class="content-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" alt="Golang">Golang</a>
+          <a href="https://www.gnu.org/software/bash/" target="_blank" class="content-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" alt="Shell">Shell Script</a>
+        </div>
+      </div>
+      
+      <div class="section-block experience">
+        <h2 id="experience-heading" class="section-heading" data-text="My Experience"></h2>
+        <div class="content">
+          <p class="content-item">4 Months on GeeksforGeeks</p>
+          <p class="content-item">1 Year on HackerRank</p>
+          <p class="content-item">Currently Learning: CEH Phase 12</p>
+        </div>
+      </div>
+      
+      <div class="section-block skills">
+        <h2 id="skills-heading" class="section-heading" data-text="What I Create"></h2>
+        <div class="content">
+          <p class="content-item">UI Designs, Automation Systems, Pentesting, Coding Projects</p>
+          <a class="projects-btn content-item" href="projects.html">See My Projects</a>
+        </div>
+      </div>
+      
+      <div class="section-block contact">
+        <h2 id="contact-heading" class="section-heading" data-text="Contact Me"></h2>
+        <div class="content">
+          <a href="https://t.me/a_lonely_ooo" target="_blank" title="Telegram" class="content-item"><i class="fab fa-telegram-plane"></i></a>
+          <a href="https://instagram.com/a_lonely_ooo" target="_blank" title="Instagram" class="content-item"><i class="fab fa-instagram"></i></a>
+          <a href="https://twitter.com/a_lonely_ooo" target="_blank" title="Twitter" class="content-item"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <footer>Built with ❤️ by <span>@a_lonely_ooo</span> using HTML, CSS & JS | © 2025. All rights reserved.</footer>
+  
+  <div class="dock" id="dockBar">
+    <div class="dock-bar"></div>
+    <a href="index.html" class="dock-item"><i class="fas fa-home"></i><span class="dock-label">Home</span></a>
+    <a href="courses.html" class="dock-item"><i class="fas fa-book"></i><span class="dock-label">Courses</span></a>
+    <a href="tools.html" class="dock-item"><i class="fas fa-wrench"></i><span class="dock-label">Tools</span></a>
+    <a href="projects.html" class="dock-item"><i class="fas fa-code"></i><span class="dock-label">Projects</span></a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      gsap.registerPlugin(ScrollTrigger);
+
+      const rotatingText = document.getElementById('rotating-text');
+      const stepperContainer = document.getElementById('stepper');
+      const nameDisplay = document.getElementById('name-display');
+      const scrollIntro = document.getElementById('scrollIntro');
+      const mainContent = document.getElementById('mainContent');
+      const dock = document.getElementById('dockBar');
+      const backBtn = document.getElementById('backBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const nameInput = document.getElementById('nameInput');
+      const stepIndicators = document.getElementById('stepIndicators');
+
+      let currentStep = 1;
+      const totalSteps = 4;
+      let userName = '';
+      let audioUnlocked = false;
+
+      // Sound effects
+      const whooshSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-quick-jump-arcade-game-239.mp3');
+      const clickSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
+      const typeSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-modern-click-box-check-1120.mp3');
+      const popSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3');
+      const successSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+
+      // Preload sounds
+      [whooshSound, clickSound, typeSound, popSound, successSound].forEach(sound => {
+        sound.volume = 0.3;
+        sound.load();
+      });
+
+      function playSound(sound) {
+        if (audioUnlocked) {
+          sound.currentTime = 0;
+          sound.play().catch(e => console.log('Audio play failed:', e));
+        }
+      }
+
+      // Typing animation for section headings
+      function typeHeading(element, text, speed = 100) {
+        return new Promise((resolve) => {
+          element.innerHTML = `<span class="typing-container"><span class="typing-text"></span><span class="typing-cursor"></span></span>`;
+          const typingText = element.querySelector('.typing-text');
+          const typingCursor = element.querySelector('.typing-cursor');
+          let i = 0;
+          
+          function type() {
+            if (i < text.length) {
+              typingText.textContent += text.charAt(i);
+              playSound(typeSound);
+              i++;
+              setTimeout(type, speed);
+            } else {
+              typingCursor.style.display = 'none'; // Remove cursor after typing
+              setTimeout(resolve, 300);
+            }
+          }
+          type();
+        });
+      }
+      
+      // Reverse typing animation
+      function reverseTypeHeading(element, text, speed = 50) {
+        return new Promise((resolve) => {
+          const typingText = element.querySelector('.typing-text');
+          const typingCursor = element.querySelector('.typing-cursor');
+          typingCursor.style.display = 'inline-block'; // Show cursor during reverse
+          let i = text.length;
+          
+          function reverse() {
+            if (i >= 0) {
+              typingText.textContent = text.substring(0, i);
+              playSound(typeSound);
+              i--;
+              setTimeout(reverse, speed);
+            } else {
+              typingCursor.style.display = 'none'; // Remove cursor after reverse
+              resolve();
+            }
+          }
+          reverse();
+        });
+      }
+      
+      // Animate content items in
+      function animateContentIn(container) {
+        const items = container.querySelectorAll('.content-item');
+        items.forEach((item, index) => {
+          setTimeout(() => {
+            item.classList.add('animate-in');
+            playSound(popSound);
+          }, index * 150);
+        });
+      }
+      
+      // Animate content items out
+      function animateContentOut(container) {
+        const items = container.querySelectorAll('.content-item');
+        items.forEach(item => {
+          item.classList.remove('animate-in');
+        });
+      }
+      
+      // Setup animations for all sections
+      const sections = [
+        { 
+          id: 'whoami-heading', 
+          content: document.querySelector('#whoami-heading').closest('.section-block').querySelector('.content'),
+          text: 'Who Am I' 
+        },
+        { 
+          id: 'languages-heading', 
+          content: document.querySelector('#languages-heading').closest('.section-block').querySelector('.content'),
+          text: 'Languages I Know' 
+        },
+        { 
+          id: 'experience-heading', 
+          content: document.querySelector('#experience-heading').closest('.section-block').querySelector('.content'),
+          text: 'My Experience' 
+        },
+        { 
+          id: 'skills-heading', 
+          content: document.querySelector('#skills-heading').closest('.section-block').querySelector('.content'),
+          text: 'What I Create' 
+        },
+        { 
+          id: 'contact-heading', 
+          content: document.querySelector('#contact-heading').closest('.section-block').querySelector('.content'),
+          text: 'Contact Me' 
+        }
+      ];
+
+      sections.forEach(section => {
+        const heading = document.getElementById(section.id);
+        
+        ScrollTrigger.create({
+          trigger: section.content,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+          once: true, // Ensure animation plays only once
+          onEnter: () => {
+            typeHeading(heading, section.text)
+              .then(() => animateContentIn(section.content));
+          },
+          onLeaveBack: () => {
+            reverseTypeHeading(heading, section.text)
+              .then(() => animateContentOut(section.content));
+          }
+        });
+      });
+
+      // Force ScrollTrigger refresh on page load
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+
+      const words = ['Developer', 'Designer', 'Creator', 'Innovator'];
+      let wordIndex = 0;
+
+      function rotateWords() {
+        if (wordIndex < words.length) {
+          const word = words[wordIndex];
+          rotatingText.innerHTML = word.split('').map(char => `<span>${char}</span>`).join('');
+          
+          gsap.fromTo(rotatingText.querySelectorAll('span'), 
+            { 
+              opacity: 0, 
+              y: 20, 
+              rotationX: 90,
+              filter: 'blur(5px)'
+            },
+            { 
+              opacity: 1, 
+              y: 0, 
+              rotationX: 0, 
+              filter: 'blur(0)',
+              duration: 0.8, 
+              stagger: 0.08,
+              ease: 'back.out(2)',
+              onStart: () => playSound(popSound)
+            }
+          );
+          
+          wordIndex++;
+          setTimeout(rotateWords, 2500);
+        } else {
+          gsap.to(rotatingText, {
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power2.in',
+            onComplete: () => {
+              rotatingText.style.display = 'none';
+              stepperContainer.style.display = 'block';
+              stepperContainer.classList.add('visible');
+              playSound(whooshSound);
+              
+              gsap.from(stepperContainer, {
+                y: 50,
+                duration: 0.8,
+                ease: 'elastic.out(1, 0.5)'
+              });
+            }
+          });
+        }
+      }
+
+      rotateWords();
+
+      for (let i = 1; i <= totalSteps; i++) {
+        const indicator = document.createElement('div');
+        indicator.classList.add('step-indicator');
+        indicator.textContent = i;
+        if (i === 1) indicator.classList.add('active');
+        stepIndicators.appendChild(indicator);
+        if (i < totalSteps) {
+          const connector = document.createElement('div');
+          connector.classList.add('step-connector');
+          stepIndicators.appendChild(connector);
+        }
+      }
+
+      function updateStepper(step) {
+        document.querySelectorAll('.step-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(`step${step}`).classList.add('active');
+        
+        document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+          indicator.classList.remove('active', 'complete');
+          if (index + 1 === step) {
+            indicator.classList.add('active');
+            gsap.to(indicator, {
+              scale: 1.2,
+              duration: 0.3,
+              yoyo: true,
+              repeat: 1,
+              ease: 'power2.inOut'
+            });
+          }
+          if (index + 1 < step) indicator.classList.add('complete');
+        });
+        
+        document.querySelectorAll('.step-connector').forEach((connector, index) => {
+          connector.classList.toggle('complete', index + 1 < step);
+        });
+        
+        backBtn.classList.toggle('disabled', step === 1);
+        nextBtn.textContent = step === totalSteps ? 'Finish' : 'Next';
+        
+        if (step === totalSteps) {
+          playSound(successSound);
+        } else {
+          playSound(clickSound);
+        }
+      }
+
+      backBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+          currentStep--;
+          updateStepper(currentStep);
+          playSound(whooshSound);
+        }
+      });
+
+      nextBtn.addEventListener('click', () => {
+        audioUnlocked = true;
+        if (currentStep === 3) {
+          userName = nameInput.value.trim() || 'Guest';
+          nameDisplay.textContent = `Hey, ${userName}!`;
+          gsap.to(nameDisplay, { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.5,
+            ease: 'back.out(1.7)'
+          });
+        }
+        if (currentStep < totalSteps) {
+          currentStep++;
+          updateStepper(currentStep);
+          playSound(whooshSound);
+        } else {
+          stepperContainer.classList.add('fade-out');
+          setTimeout(() => {
+            stepperContainer.style.display = 'none';
+            scrollIntro.classList.add('visible');
+            document.body.style.overflowY = 'auto';
+            mainContent.style.display = 'block';
+            
+            gsap.from(scrollIntro, {
+              y: 50,
+              opacity: 0,
+              duration: 1,
+              ease: 'elastic.out(1, 0.5)'
+            });
+            
+            playSound(successSound);
+          }, 400);
+        }
+      });
+
+      const ctx = document.getElementById('particles').getContext('2d');
+      const particles = [];
+      const particleCount = 80;
+
+      function resizeCanvas() {
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * ctx.canvas.width;
+          this.y = Math.random() * ctx.canvas.height;
+          this.size = Math.random() * 2 + 1;
+          this.speedX = Math.random() * 0.5 - 0.25;
+          this.speedY = Math.random() * 0.5 - 0.25;
+          this.color = `rgba(0, ${198 + Math.random() * 57}, 255, ${0.3 + Math.random() * 0.3})`;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x < 0 || this.x > ctx.canvas.width) this.speedX *= -1;
+          if (this.y < 0 || this.y > ctx.canvas.height) this.speedY *= -1;
+        }
+        draw() {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+          
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = this.color;
+        }
+      }
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animateParticles);
+      }
+
+      animateParticles();
+
+      gsap.to('#mainCard', {
+        scrollTrigger: {
+          trigger: '#mainCard',
+          start: 'top 80%',
+          end: 'top 50%',
+          scrub: true,
+          toggleActions: 'play none reverse none'
+        },
+        scale: 1,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      });
+
+      let dockShown = false;
+      
+      ScrollTrigger.create({
+        trigger: "#mainContent",
+        start: "top 70%",
+        end: "top 50%",
+        onEnter: () => {
+          if (!dockShown) {
+            dockShown = true;
+            showDock();
+          }
+        },
+        onLeaveBack: () => {
+          dockShown = false;
+          hideDock();
+        }
+      });
+
+      function showDock() {
+        dock.classList.add('visible');
+        playSound(whooshSound);
+        
+        setTimeout(() => {
+          gsap.to(".dock-item", {
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            duration: 0.4,
+            ease: "back.out(1.7)",
+            stagger: 0.1,
+            onStart: () => playSound(popSound)
+          });
+        }, 300);
+      }
+
+      function hideDock() {
+        gsap.to(".dock-item", {
+          y: 20,
+          scale: 0.8,
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.in",
+          stagger: 0.05,
+          onComplete: () => {
+            dock.classList.remove('visible');
+            playSound(whooshSound);
+          }
+        });
+      }
+
+      gsap.to(scrollIntro, {
+        scrollTrigger: {
+          trigger: '#mainContent',
+          start: 'top 80%',
+          end: 'top 70%',
+          scrub: false,
+          toggleActions: 'play none reverse none',
+          onEnter: () => {
+            gsap.to(scrollIntro, {
+              opacity: 0,
+              y: -20,
+              duration: 0.5,
+              onComplete: () => scrollIntro.classList.add('hide')
+            });
+          },
+          onLeaveBack: () => {
+            scrollIntro.classList.remove('hide');
+            gsap.to(scrollIntro, {
+              opacity: 1,
+              y: 0,
+              duration: 0.5
+            });
+          }
+        }
+      });
+
+      nameInput.addEventListener('focus', () => {
+        gsap.to(nameInput, {
+          borderColor: '#7b3bff',
+          boxShadow: '0 0 15px #7b3bff',
+          duration: 0.3
+        });
+      });
+
+      nameInput.addEventListener('blur', () => {
+        gsap.to(nameInput, {
+          borderColor: '#00d4ff',
+          boxShadow: 'none',
+          duration: 0.3
+        });
+      });
+
+      // Hover effects for all interactive elements
+      document.querySelectorAll('a, button').forEach(element => {
+        element.addEventListener('mouseenter', () => {
+          playSound(popSound);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jayansh - Courses</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('back.jpg') no-repeat center center/cover;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 60px 20px;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .home-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      padding: 8px 15px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 0.9em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #00c6ff;
+      z-index: 1000;
+    }
+
+    .home-btn:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 15px;
+      background: #ffffff;
+      border: 2px solid #00c6ff;
+      border-radius: 20px;
+      color: #00c6ff;
+      font-size: 0.9em;
+      font-weight: normal;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 5px rgba(0, 198, 255, 0.5);
+      cursor: pointer;
+    }
+
+    .filter-btn:hover {
+      background: #e6f7ff;
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(0, 198, 255, 0.7);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      color: white;
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .filter-btn.active:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    .category-select {
+      padding: 8px 30px 8px 15px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 0.9em;
+      font-weight: normal;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 5px #00c6ff;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,10" style="fill:%23ffffff;"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 10px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    .category-select:hover, .category-select:focus {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px #00c6ff;
+      outline: none;
+    }
+
+    .category-select option {
+      background: rgba(0, 0, 0, 0.9);
+      color: #ffffff;
+      font-size: 1em;
+      padding: 10px;
+    }
+
+    .category-select option:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .search-bar {
+      padding: 8px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      color: #ccc;
+      font-size: 0.9em;
+      font-weight: normal;
+      transition: all 0.3s ease;
+      width: 200px;
+    }
+
+    .search-bar:hover, .search-bar:focus {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    .search-bar::placeholder {
+      color: #ccc;
+      opacity: 0.7;
+    }
+
+    .course-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .course {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .course:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .course h2 {
+      font-size: 1.5em;
+      color: #00c6ff;
+      margin: 0 0 10px;
+    }
+
+    .course p {
+      font-size: 1em;
+      color: #fff;
+      margin: 0 0 10px;
+      line-height: 1.6;
+    }
+
+    .course .price {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00c6ff;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      justify-content: center;
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      width: 80%;
+      max-width: 600px;
+      position: relative;
+      color: #fff;
+      text-align: center;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-content h2 {
+      font-size: 1.5em;
+      color: #00c6ff;
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      font-size: 1em;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .modal-content img, .modal-content video {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: block;
+    }
+
+    .modal-content .price {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00c6ff;
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .modal-buttons button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .buy-btn {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .buy-btn:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    .cart-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    .cart-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .close:hover {
+      color: #00c6ff;
+    }
+
+    .contact-section {
+      position: fixed;
+      bottom: 30px;
+      right: 10px;
+      text-align: right;
+      z-index: 10;
+    }
+
+    .contact-section p {
+      font-size: 0.8em;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+
+    .social-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .social-btn {
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      color: #ccc;
+      font-size: 0.7em;
+      font-weight: normal;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 15px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9em;
+      color: lch(74.58% 44.77 241.61);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .made-by {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-size: 0.8em;
+      color: #ccc;
+      z-index: 10;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Image -->
+  <div class="background"></div>
+  <div class="overlay"></div>
+
+  <!-- Home Button -->
+  <a href="main.html" class="home-btn">Home</a>
+
+  <!-- Content -->
+  <div class="container">
+    <div class="card">
+      <h1>Our Courses</h1>
+      <!-- Filter Buttons -->
+      <div class="filter-container">
+        <button class="filter-btn active" data-filter="all" onclick="toggleFilter('all')">All</button>
+        <button class="filter-btn" data-filter="free" onclick="toggleFilter('free')">Free</button>
+        <button class="filter-btn" data-filter="paid" onclick="toggleFilter('paid')">Paid</button>
+        <select class="category-select" onchange="updateCategoryFilter(this.value)">
+          <option value="all">All Categories</option>
+          <option value="hacking">Hacking</option>
+          <option value="cracking">Cracking</option>
+          <option value="carding">Carding</option>
+          <option value="system">System</option>
+          <option value="wifi-hacking">Wifi Hacking</option>
+          <option value="dhruv-rathee">Dhruv Rathee Courses</option>
+          <option value="rat-courses">Rat Courses</option>
+          <option value="linux-courses">Linux Courses</option>
+          <option value="ai">AI</option>
+          <option value="dark-web">Dark Web</option>
+          <option value="networking">Networking</option>
+          <option value="social-media">Social Media</option>
+          <option value="bypass">Bypass</option>
+          <option value="computer-programming">Computer Programming</option>
+          <option value="others">Others</option>
+        </select>
+        <input type="text" class="search-bar" placeholder="Search courses..." oninput="updateSearchFilter(this.value)">
+      </div>
+      <div class="course-list">
+        <!-- Course 1 -->
+        <div class="course" onclick="openModal('modal1')" data-price="free" data-category="hacking">
+          <h2>Blackhat Hacking Course</h2>
+          <p>Learn the advanced Hacking course from Beginner to Professional, Be an Blackhat Hacker</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 2 -->
+        <div class="course" onclick="openModal('modal2')" data-price="free" data-category="cracking">
+          <h2>Ultimate Cracking Course</h2>
+          <p>Learn account cracking very easily, Crack Netflix, Amazon, Minecraft, Steam or anything you want by this course</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 3 -->
+        <div class="course" onclick="openModal('modal3')" data-price="free" data-category="hacking wifi-hacking">
+          <h2>Wifi Hacking</h2>
+          <p>Hack Anyone's Wifi!</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 4 -->
+        <div class="course" onclick="openModal('modal4')" data-price="free" data-category="hacking linux-courses">
+          <h2>Android Hacking By Linux</h2>
+          <p>Exploit Anyone's android system easily by <b>Linux</b></p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 5 -->
+        <div class="course" onclick="openModal('modal5')" data-price="free" data-category="hacking rat-courses">
+          <h2>Android Hacking by Crax Rat</h2>
+          <p>Rat - Remote administrative Tool is a tool used to hack a system by just sending an application to his/her device...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 6 -->
+        <div class="course" onclick="openModal('modal6')" data-price="free" data-category="hacking">
+          <h2>Ultimate CEH Course</h2>
+          <p>Learn the basic to advance Hacking.. Be a Certified Ethical Hacker</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 7 -->
+        <div class="course" onclick="openModal('modal7')" data-price="free" data-category="hacking linux-courses">
+          <h2>Windows Hacking by Linux</h2>
+          <p>Exploit any computer system...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 8 -->
+        <div class="course" onclick="openModal('modal8')" data-price="free" data-category="system others">
+          <h2>Operating System Complete Course</h2>
+          <p>Learn Basic To advance of Operating Systems, How OS works, What's inside it etc. Make your Own OS by this Course</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 9 -->
+        <div class="course" onclick="openModal('modal9')" data-price="free" data-category="hacking">
+          <h2>DDOS and DOS Complete Course</h2>
+          <p>DDOS is a technique used by hacker to Down or completely shutdown any website.. By this course you will learn the concept of ddos, botnet and encryption by which you can make you own ddos</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 10 -->
+        <div class="course" onclick="openModal('modal10')" data-price="free" data-category="ai">
+          <h2>AI Jailbreaking</h2>
+          <p>Jailbreak Any AI and ask Anything you want</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 11 -->
+        <div class="course" onclick="openModal('modal11')" data-price="free" data-category="others">
+          <h2>APK Modding Course</h2>
+          <p>Mod Any APK by this course. Moding is a technique to manipulate an APK according to yourself. Some examples are minecraft mod, granny game mod, spotify mod etc...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 12 -->
+        <div class="course" onclick="openModal('modal12')" data-price="free" data-category="dark-web hacking">
+          <h2>Dark Web Full Course</h2>
+          <p>Access and learn the whole dark web by your system... easily*</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 13 -->
+        <div class="course" onclick="openModal('modal13')" data-price="free" data-category="hacking">
+          <h2>Windows Hacking By Only a Pendrive</h2>
+          <p>Hack any Computer system by just inserting a pendrive into it...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 14 -->
+        <div class="course" onclick="openModal('modal14')" data-price="free" data-category="ai">
+          <h2>All in One AI Course</h2>
+          <p>Master the power of AI by this ultimate course...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 15 -->
+        <div class="course" onclick="openModal('modal15')" data-price="free" data-category="others">
+          <h2>Sim Cloning</h2>
+          <p>Clone any number or sim by yourself at your home... All messages of that number will also come to your cloned sim</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 16 -->
+        <div class="course" onclick="openModal('modal16')" data-price="free" data-category="carding">
+          <h2>Professional Carding Course</h2>
+          <p>Card anything you want by this course. Be a pro Carder...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 17 -->
+        <div class="course" onclick="openModal('modal17')" data-price="free" data-category="hacking">
+          <h2>Mini Hacking Course</h2>
+          <p>A very small hacking course for Lazy one...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 18 -->
+        <div class="course" onclick="openModal('modal18')" data-price="free" data-category="system others">
+          <h2>CMD and PowerShell Full Course</h2>
+          <p>Master the power of the 2 major terminals of windows "CMD" and "PowerShell"</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 19 -->
+        <div class="course" onclick="openModal('modal19')" data-price="free" data-category="hacking rat-courses">
+          <h2>Android Trojan Building Course</h2>
+          <p>Built Android trojan easily by your system</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 20 -->
+        <div class="course" onclick="openModal('modal20')" data-price="free" data-category="hacking">
+          <h2>Website Hacking Course</h2>
+          <p>Hack and hijack any website you want by this course</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 21 -->
+        <div class="course" onclick="openModal('modal21')" data-price="free" data-category="others">
+          <h2>Social Engineering Course</h2>
+          <p>Master in Social Engineering...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 22 -->
+        <div class="course" onclick="openModal('modal22')" data-price="free" data-category="others">
+          <h2>PUBG and FREE FIRE Hack Making Course</h2>
+          <p>Make your Own Hack files or panels by this course for free fire, pubg and other games, hacks like - magic bullet, autoheadshot, aimbot etc...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 23 -->
+        <div class="course" onclick="openModal('modal23')" data-price="free" data-category="others">
+          <h2>Spamming Full Course</h2>
+          <p>Master in Spamming...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 24 -->
+        <div class="course" onclick="openModal('modal24')" data-price="free" data-category="hacking">
+          <h2>CCTV Camera Hacking</h2>
+          <p>Hack any CCTV Camera...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 25 -->
+        <div class="course" onclick="openModal('modal25')" data-price="free" data-category="networking">
+          <h2>Paid Networking Course</h2>
+          <p>Master in Networking...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 26 -->
+        <div class="course" onclick="openModal('modal26')" data-price="free" data-category="networking">
+          <h2>Network Penetration Course</h2>
+          <p>Master in Network Penetration...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 27 -->
+        <div class="course" onclick="openModal('modal27')" data-price="free" data-category="hacking social-media">
+          <h2>Instagram Hacking Course</h2>
+          <p>Hack Any Instagram id...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 28 -->
+        <div class="course" onclick="openModal('modal28')" data-price="free" data-category="hacking">
+          <h2>Car Hacking Course</h2>
+          <p>Remote control Any electric and mechanical Car by this course</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 29 -->
+        <div class="course" onclick="openModal('modal29')" data-price="free" data-category="linux-courses hacking">
+          <h2>Kali Linux Full Course</h2>
+          <p>Master in Operating Kali Linux and Its Terminals...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 30 -->
+        <div class="course" onclick="openModal('modal30')" data-price="free" data-category="others">
+          <h2>Anti Virus Course</h2>
+          <p>Master in Anti Virus And Virus Killing...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 31 -->
+        <div class="course" onclick="openModal('modal31')" data-price="free" data-category="dhruv-rathee">
+          <h2>Dhruv Rathee Time Management Course</h2>
+          <p>Official Dhruv Rathee time management course</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 32 -->
+        <div class="course" onclick="openModal('modal32')" data-price="free" data-category="dhruv-rathee ai">
+          <h2>Dhruv Rathee ChatGPT Course</h2>
+          <p>Official Dhruv Rathee chatgpt course</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 33 -->
+        <div class="course" onclick="openModal('modal33')" data-price="free" data-category="dhruv-rathee">
+          <h2>Dhruv Rathee Blueprint Course</h2>
+          <p>Official Dhruv Rathee Blueprint course</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 34 -->
+        <div class="course" onclick="openModal('modal34')" data-price="free" data-category="cracking">
+          <h2>Netflix Cracking Course</h2>
+          <p>Crack Unlimited Netflix accounts...</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 35 -->
+        <div class="course" onclick="openModal('modal35')" data-price="free" data-category="hacking social-media">
+          <h2>Insta and Facebook Hacking</h2>
+          <p>Hack Any Insta and Facebook id</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 36 -->
+        <div class="course" onclick="openModal('modal36')" data-price="free" data-category="bypass hacking">
+          <h2>OTP Bypass for General Verification</h2>
+          <p>Bypass OTP for Any website</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 37 -->
+        <div class="course" onclick="openModal('modal37')" data-price="free" data-category="bypass hacking">
+          <h2>PayPal 2FA Verification Bypass</h2>
+          <p>Bypass PayPal 2FA OTP verification bypass</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 38 -->
+        <div class="course" onclick="openModal('modal38')" data-price="free" data-category="hacking">
+          <h2>Burpsuite Full Course</h2>
+          <p>Master the power of burpsuite by this course</p>
+          <div class="price">Price: Free</div>
+        </div>
+        <!-- Course 39 -->
+        <div class="course" onclick="openModal('modal39')" data-price="free" data-category="computer-programming">
+          <h2>Ultimate Computer Language and Learning Course</h2>
+          <p>Course related to: Data Science, React JS, Angular, SEO, Digital Marketing, Cloud Security, Web Dev (HTML & CSS), Python, JavaScript, DevOps, Machine Learning, Java, C++, Go (Golang), Neo4j Certification, Redis Certification, MongoDB, Backend Development, C#</p>
+          <div class="price">Price: Free</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal" id="modal1">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal1')">×</span>
+      <h2>Blackhat Hacking Course</h2>
+      <p>Learn the advanced Hacking course from Beginner to Professional, Be an Blackhat Hacker</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/blackhat_course" onclick="buyNow('Blackhat Hacking Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/blackhat-hacking-course-cart" onclick="addToCart('Blackhat Hacking Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal2">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal2')">×</span>
+      <h2>Ultimate Cracking Course</h2>
+      <p>Learn account cracking very easily, Crack Netflix, Amazon, Minecraft, Steam or anything you want by this course</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/cracking_course" onclick="buyNow('Ultimate Cracking Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/ultimate-cracking-course-cart" onclick="addToCart('Ultimate Cracking Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal3">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal3')">×</span>
+      <h2>Wifi Hacking</h2>
+      <p>Hack Anyone's Wifi!</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/wifi_hacking" onclick="buyNow('Wifi Hacking', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/wifi-hacking-cart" onclick="addToCart('Wifi Hacking', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal4">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal4')">×</span>
+      <h2>Android Hacking By Linux</h2>
+      <p>Exploit Anyone's android system easily by <b>Linux</b></p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/androidHackingByLinux" onclick="buyNow('Android Hacking By Linux', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/android-hacking-linux-cart" onclick="addToCart('Android Hacking By Linux', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal5">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal5')">×</span>
+      <h2>Android Hacking by Crax Rat</h2>
+      <p>Rat - Remote administrative Tool is a tool used to hack a system by just sending an application to his/her device...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/androidHackingByRat" onclick="buyNow('Android Hacking by Crax Rat', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/android-hacking-crax-rat-cart" onclick="addToCart('Android Hacking by Crax Rat', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal6">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal6')">×</span>
+      <h2>Ultimate CEH Course</h2>
+      <p>Learn the basic to advance Hacking.. Be a Certified Ethical Hacker</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/CEH_PDF" onclick="buyNow('Ultimate CEH Course', 0, this)">Buy Now</button>
+        <button class="buy-btn" data-link="https://tpi.li/websiteHacking_course" onclick="buyNow('Ultimate CEH Course', 0, this)">Buy Now2</button>
+        <button class="cart-btn" data-link="https://example.com/ultimate-ceh-course-cart" onclick="addToCart('Ultimate CEH Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal7">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal7')">×</span>
+      <h2>Windows Hacking by Linux</h2>
+      <p>Exploit any computer system...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/PcHackingByLinux" onclick="buyNow('Windows Hacking by Linux', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/windows-hacking-linux-cart" onclick="addToCart('Windows Hacking by Linux', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal8">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal8')">×</span>
+      <h2>Operating System Complete Course</h2>
+      <p>Learn Basic To advance of Operating Systems, How OS works, What's inside it etc. Make your Own OS by this Course</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/OS_COURSE" onclick="buyNow('Operating System Complete Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/operating-system-course-cart" onclick="addToCart('Operating System Complete Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal9">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal9')">×</span>
+      <h2>DDOS and DOS Complete Course</h2>
+      <p>DDOS is a technique used by hacker to Down or completely shutdown any website.. By this course you will learn the concept of ddos, botnet and encryption by which you can make you own ddos</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/DDOS" onclick="buyNow('DDOS and DOS Complete Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/ddos-dos-course-cart" onclick="addToCart('DDOS and DOS Complete Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal10">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal10')">×</span>
+      <h2>AI Jailbreaking</h2>
+      <p>Jailbreak Any AI and ask Anything you want</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/AI_JAILBREAK" onclick="buyNow('AI Jailbreaking', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/ai-jailbreaking-cart" onclick="addToCart('AI Jailbreaking', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal11">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal11')">×</span>
+      <h2>APK Modding Course</h2>
+      <p>Mod Any APK by this course. Moding is a technique to manipulate an APK according to yourself. Some examples are minecraft mod, granny game mod, spotify mod etc...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/APK_MODDING" onclick="buyNow('APK Modding Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/apk-modding-course-cart" onclick="addToCart('APK Modding Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal12">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal12')">×</span>
+      <h2>Dark Web Full Course</h2>
+      <p>Access and learn the whole dark web by your system... easily*</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/Darkweb_course" onclick="buyNow('Dark Web Full Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/dark-web-course-cart" onclick="addToCart('Dark Web Full Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal13">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal13')">×</span>
+      <h2>Windows Hacking By Only a Pendrive</h2>
+      <p>Hack any Computer system by just inserting a pendrive into it...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://example.com/windows-hacking-pendrive" onclick="buyNow('Windows Hacking By Only a Pendrive', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/windows-hacking-pendrive-cart" onclick="addToCart('Windows Hacking By Only a Pendrive', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal14">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal14')">×</span>
+      <h2>All in One AI Course</h2>
+      <p>Master the power of AI by this ultimate course...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/AI_course" onclick="buyNow('All in One AI Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/all-in-one-ai-course-cart" onclick="addToCart('All in One AI Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal15">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal15')">×</span>
+      <h2>Sim Cloning</h2>
+      <p>Clone any number or sim by yourself at your home... All messages of that number will also come to your cloned sim</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/SimCloning_course" onclick="buyNow('Sim Cloning', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/sim-cloning-cart" onclick="addToCart('Sim Cloning', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal16">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal16')">×</span>
+      <h2>Professional Carding Course</h2>
+      <p>Card anything you want by this course. Be a pro Carder...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/Carding_course" onclick="buyNow('Professional Carding Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/professional-carding-course-cart" onclick="addToCart('Professional Carding Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal17">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal17')">×</span>
+      <h2>Mini Hacking Course</h2>
+      <p>A very small hacking course for Lazy one...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/miniHacking_course" onclick="buyNow('Mini Hacking Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/mini-hacking-course-cart" onclick="addToCart('Mini Hacking Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal18">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal18')">×</span>
+      <h2>CMD and PowerShell Full Course</h2>
+      <p>Master the power of the 2 major terminals of windows "CMD" and "PowerShell"</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/cmd_course" onclick="buyNow('CMD and PowerShell Full Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/cmd-powershell-course-cart" onclick="addToCart('CMD and PowerShell Full Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal19">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal19')">×</span>
+      <h2>Android Trojan Building Course</h2>
+      <p>Built Android trojan easily by your system</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/trojan_building_course" onclick="buyNow('Android Trojan Building Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/android-trojan-building-cart" onclick="addToCart('Android Trojan Building Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal20">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal20')">×</span>
+      <h2>Website Hacking Course</h2>
+      <p>Hack and hijack any website you want by this course</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/websiteHacking_course" onclick="buyNow('Website Hacking Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/website-hacking-course-cart" onclick="addToCart('Website Hacking Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal21">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal21')">×</span>
+      <h2>Social Engineering Course</h2>
+      <p>Master in Social Engineering...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://example.com/social-engineering-course" onclick="buyNow('Social Engineering Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/social-engineering-course-cart" onclick="addToCart('Social Engineering Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal22">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal22')">×</span>
+      <h2>PUBG and FREE FIRE Hack Making Course</h2>
+      <p>Make your Own Hack files or panels by this course for free fire, pubg and other games, hacks like - magic bullet, autoheadshot, aimbot etc...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/PUBGHACKMAKING_course" onclick="buyNow('PUBG and FREE FIRE Hack Making Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/pubg-freefire-hack-course-cart" onclick="addToCart('PUBG and FREE FIRE Hack Making Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal23">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal23')">×</span>
+      <h2>Spamming Full Course</h2>
+      <p>Master in Spamming...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/spamming_course" onclick="buyNow('Spamming Full Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/spamming-course-cart" onclick="addToCart('Spamming Full Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal24">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal24')">×</span>
+      <h2>CCTV Camera Hacking</h2>
+      <p>Hack any CCTV Camera...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/CCTVCameraHacking_course" onclick="buyNow('CCTV Camera Hacking', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/cctv-camera-hacking-cart" onclick="addToCart('CCTV Camera Hacking', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal25">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal25')">×</span>
+      <h2>Paid Networking Course</h2>
+      <p>Master in Networking...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://example.com/paid-networking-course" onclick="buyNow('Paid Networking Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/paid-networking-course-cart" onclick="addToCart('Paid Networking Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal26">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal26')">×</span>
+      <h2>Network Penetration Course</h2>
+      <p>Master in Network Penetration...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/FB_INSTA_course" onclick="buyNow('Network Penetration Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/network-penetration-course-cart" onclick="addToCart('Network Penetration Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal27">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal27')">×</span>
+      <h2>Instagram Hacking Course</h2>
+      <p>Hack Any Instagram id...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/FB_INSTA_course" onclick="buyNow('Instagram Hacking Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/instagram-hacking-course-cart" onclick="addToCart('Instagram Hacking Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal28">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal28')">×</span>
+      <h2>Car Hacking Course</h2>
+      <p>Remote control Any electric and mechanical Car by this course</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/carHacking_course" onclick="buyNow('Car Hacking Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/car-hacking-course-cart" onclick="addToCart('Car Hacking Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal29">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal29')">×</span>
+      <h2>Kali Linux Full Course</h2>
+      <p>Master in Operating Kali Linux and Its Terminals...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/kali_linux_course" onclick="buyNow('Kali Linux Full Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/kali-linux-course-cart" onclick="addToCart('Kali Linux Full Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal30">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal30')">×</span>
+      <h2>Anti Virus Course</h2>
+      <p>Master in Anti Virus And Virus Killing...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/Anti_virus_course" onclick="buyNow('Anti Virus Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/anti-virus-course-cart" onclick="addToCart('Anti Virus Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal31">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal31')">×</span>
+      <h2>Dhruv Rathee Time Management Course</h2>
+      <p>Official Dhruv Rathee time management course</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/DHRUV_RATHEE_COURSE2" onclick="buyNow('Dhruv Rathee Time Management Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/dhruv-rathee-time-management-cart" onclick="addToCart('Dhruv Rathee Time Management Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal32">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal32')">×</span>
+      <h2>Dhruv Rathee ChatGPT Course</h2>
+      <p>Official Dhruv Rathee chatgpt course</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/DHRUV_RATHEE_COURSE1" onclick="buyNow('Dhruv Rathee ChatGPT Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/dhruv-rathee-chatgpt-cart" onclick="addToCart('Dhruv Rathee ChatGPT Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal33">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal33')">×</span>
+      <h2>Dhruv Rathee Blueprint Course</h2>
+      <p>Official Dhruv Rathee Blueprint course</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://t.me/Blackhatabhi37bot/?start=mbblcsy7" onclick="buyNow('Dhruv Rathee Blueprint Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/dhruv-rathee-blueprint-cart" onclick="addToCart('Dhruv Rathee Blueprint Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal34">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal34')">×</span>
+      <h2>Netflix Cracking Course</h2>
+      <p>Crack Unlimited Netflix accounts...</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/Netflix_cracking" onclick="buyNow('Netflix Cracking Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/netflix-cracking-course-cart" onclick="addToCart('Netflix Cracking Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal35">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal35')">×</span>
+      <h2>Insta and Facebook Hacking</h2>
+      <p>Hack Any Insta and Facebook id</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/FBandInsta_hacking" onclick="buyNow('Insta and Facebook Hacking', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/insta-facebook-hacking-cart" onclick="addToCart('Insta and Facebook Hacking', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal36">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal36')">×</span>
+      <h2>OTP Bypass for General Verification</h2>
+      <p>Bypass OTP for Any website</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/OTPBYPASS" onclick="buyNow('OTP Bypass for General Verification', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/otp-bypass-general-cart" onclick="addToCart('OTP Bypass for General Verification', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal37">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal37')">×</span>
+      <h2>PayPal 2FA Verification Bypass</h2>
+      <p>Bypass PayPal 2FA OTP verification bypass</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/Paypal_2fa_bypass" onclick="buyNow('PayPal 2FA Verification Bypass', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/paypal-2fa-bypass-cart" onclick="addToCart('PayPal 2FA Verification Bypass', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal38">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal38')">×</span>
+      <h2>Burpsuite Full Course</h2>
+      <p>Master the power of burpsuite by this course</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/burpsuite" onclick="buyNow('Burpsuite Full Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/burpsuite-course-cart" onclick="addToCart('Burpsuite Full Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal39">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal39')">×</span>
+      <h2>Ultimate Computer Language and Learning Course</h2>
+      <p>Course related to: Data Science, React JS, Angular, SEO, Digital Marketing, Cloud Security, Web Dev (HTML & CSS), Python, JavaScript, DevOps, Machine Learning, Java, C++, Go (Golang), Neo4j Certification, Redis Certification, MongoDB, Backend Development, C#</p>
+      <div class="price">Price: Free</div>
+      <div class="modal-buttons">
+        <button class="buy-btn" data-link="https://tpi.li/computer" onclick="buyNow('Ultimate Computer Language and Learning Course', 0, this)">Buy Now</button>
+        <button class="cart-btn" data-link="https://example.com/ultimate-computer-language-course-cart" onclick="addToCart('Ultimate Computer Language and Learning Course', 0, this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Made By -->
+  <div class="made-by">Made by @a_lonely_ooo</div>
+
+  <footer>If You Want Any Tool, Method, Script related to any course check out the <b>Tools</b> Section</footer>
+
+<script>
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let currentSearchTerm = '';
+
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.style.display = 'flex';
+    } else {
+      console.error(`Modal with ID ${modalId} not found.`);
+    }
+  }
+
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      const videos = modal.getElementsByTagName('video');
+      for (let video of videos) {
+        video.pause();
+      }
+      modal.style.display = 'none';
+    } else {
+      console.error(`Modal with ID ${modalId} not found.`);
+    }
+  }
+
+  function addToCart(name, price, button) {
+    const link = button.getAttribute('data-link');
+    if (link) {
+      cart.push({ name, price, link });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${name} has been added to your cart! Redirecting to ${link}`);
+      window.location.href = link;
+    } else {
+      alert('Link not found for this course.');
+    }
+  }
+
+  function buyNow(name, price, button) {
+    const link = button.getAttribute('data-link');
+    if (link) {
+      alert(`Proceeding to buy ${name} for ₹${price}... Redirecting to ${link}`);
+      window.location.href = link;
+    } else {
+      alert('Link not found for this course.');
+    }
+  }
+
+  function applyFilters() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const courses = document.querySelectorAll('.course');
+    const categorySelect = document.querySelector('.category-select');
+    const selectedCategory = categorySelect ? categorySelect.value : 'all';
+    const searchTerm = currentSearchTerm.trim().toLowerCase();
+
+    const activePriceFilters = Array.from(buttons)
+      .filter(btn => btn.classList.contains('active'))
+      .map(btn => btn.getAttribute('data-filter'))
+      .filter(f => f !== 'all');
+
+    const isAllPriceActive = activePriceFilters.length === 0;
+
+    const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+    if (isAllPriceActive && allButton) {
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-filter') === 'all') {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    courses.forEach(course => {
+      const price = course.getAttribute('data-price') || 'free';
+      const categories = course.getAttribute('data-category') ? course.getAttribute('data-category').split(' ') : ['others'];
+      const heading = course.querySelector('h2')?.textContent.toLowerCase() || '';
+      const description = course.querySelector('p')?.textContent.toLowerCase() || '';
+
+      const matchesPrice = isAllPriceActive ||
+        (activePriceFilters.includes('free') && price === 'free') ||
+        (activePriceFilters.includes('paid') && price === 'paid');
+
+      const matchesCategory = selectedCategory === 'all' || categories.includes(selectedCategory);
+
+      const matchesSearch = !searchTerm || heading.includes(searchTerm) || description.includes(searchTerm);
+
+      course.style.display = matchesPrice && matchesCategory && matchesSearch ? 'block' : 'none';
+    });
+  }
+
+  function toggleFilter(filterType) {
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    if (filterType === 'all') {
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-filter') === 'all') {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    } else {
+      const currentButton = document.querySelector(`.filter-btn[data-filter="${filterType}"]`);
+      if (currentButton) {
+        currentButton.classList.toggle('active');
+        const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+        if (allButton) {
+          allButton.classList.remove('active');
+        }
+      }
+    }
+
+    applyFilters();
+  }
+
+  function updateCategoryFilter(category) {
+    applyFilters();
+  }
+
+  function updateSearchFilter(searchTerm) {
+    currentSearchTerm = searchTerm;
+    applyFilters();
+  }
+
+  // Initialize filters on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    applyFilters();
+  });
+</script>
+</body>
+</html>

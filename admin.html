@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Share Post</title>
+    <style>
+        body {
+            background-color: #808080;
+            color: #ffd700;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid white;
+            border-radius: 5px;
+            background-color: #808080;
+            color: #ffd700;
+        }
+        button {
+            background-color: #ffd700;
+            color: #808080;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e6c200;
+        }
+        #shareLink {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin - Share Post</h1>
+        <form id="shareForm">
+            <label for="postText">Post Text (optional):</label>
+            <textarea id="postText" rows="4" placeholder="Enter the post text here..."></textarea>
+
+            <label for="postFile">Post File (optional):</label>
+            <input type="file" id="postFile" accept="*/*">
+
+            <button type="submit">Generate Share Link</button>
+        </form>
+        <div id="shareLink"></div>
+    </div>
+
+    <script>
+        // Function to generate a unique ID
+        function generateUniqueId() {
+            return 'post_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Handle form submission
+        document.getElementById('shareForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const postText = document.getElementById('postText').value;
+            const postFile = document.getElementById('postFile').files[0];
+
+            if (!postText && !postFile) {
+                alert('Please provide either some text or a file.');
+                return;
+            }
+
+            // Generate a unique ID for the post
+            const postId = generateUniqueId();
+
+            // Retrieve existing posts from localStorage
+            const posts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
+
+            // Handle the file (convert to data URL if a file is uploaded)
+            if (postFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fileData = e.target.result;
+                    const fileName = postFile.name;
+
+                    // Store the post in localStorage
+                    posts[postId] = {
+                        text: postText || null,
+                        fileData: fileData,
+                        fileName: fileName
+                    };
+                    localStorage.setItem('sharedPosts', JSON.stringify(posts));
+
+                    // Generate the share link
+                    const shareLink = `${window.location.origin}/shared-post.html?id=${postId}`;
+                    document.getElementById('shareLink').innerHTML = `Share this link: <a href="${shareLink}" target="_blank">${shareLink}</a>`;
+                };
+                reader.readAsDataURL(postFile);
+            } else {
+                // No file, just store the text
+                posts[postId] = {
+                    text: postText || null,
+                    fileData: null,
+                    fileName: null
+                };
+                localStorage.setItem('sharedPosts', JSON.stringify(posts));
+
+                // Generate the share link
+                const shareLink = `${window.location.origin}/shared-post.html?id=${postId}`;
+                document.getElementById('shareLink').innerHTML = `Share this link: <a href="${shareLink}" target="_blank">${shareLink}</a>`;
+            }
+        });
+    </script>
+</body>
+</html>

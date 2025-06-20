@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jayansh - BIO</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 60px 20px;
+      height: 100%;
+      overflow-y: auto;
+      display: none; /* Hidden initially on birthday */
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile-pic {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #fff;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .info-box {
+      text-align: left;
+      margin-top: 25px;
+    }
+
+    .info-box h2 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #fff;
+      padding-bottom: 5px;
+    }
+
+    .info-box ul {
+      list-style: none;
+      padding: 0;
+      line-height: 1.8;
+    }
+
+    .info-box ul li::before {
+      content: "› ";
+      color: #00c6ff;
+    }
+
+    .telegram-btn {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 1.1em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #00c6ff;
+    }
+
+    .telegram-btn:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00c6ff;
+    }
+
+    .contact-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #ccc;
+    }
+
+    .mute-btn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1em;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .mute-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(1.1);
+    }
+
+    .birthday-splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      cursor: pointer;
+      animation: fadeInSplash 1s ease forwards;
+    }
+
+    .birthday-splash h1 {
+      font-size: 2.5em;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #ff0a54, #ff477e);
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ff0a54;
+      transition: transform 0.3s ease;
+    }
+
+    .birthday-splash h1:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeInSplash {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .made-by {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-size: 0.8em;
+      color: #ccc;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .custom-ui-container {
+      position: fixed;
+      bottom: 30px; /* Above footer to avoid overlap */
+      right: 10px;
+      display: flex;
+      align-items: center;
+      font-size: 0.7em;
+      color: #ccc;
+      z-index: 10;
+      opacity: 0; /* Hidden until scrolled to bottom */
+      pointer-events: none;
+    }
+
+    .custom-ui-container.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .custom-ui-text {
+      margin-right: 8px;
+    }
+
+    .custom-ui-btn {
+      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #ccc;
+      font-size: 0.7em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+    }
+
+    .custom-ui-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background Video -->
+<video autoplay muted loop>
+  <source src="bg.mp4" type="video/mp4" />
+  Your browser does not support HTML5 video.
+</video>
+<div class="overlay"></div>
+
+<!-- Mute Button -->
+<button class="mute-btn" id="muteBtn">🔊</button>
+
+<!-- Birthday Splash Screen -->
+<div class="birthday-splash" id="birthdaySplash" style="display: none;">
+  <h1>Today is my birthday! Click to check my bio 🎉</h1>
+</div>
+
+<!-- Content -->
+<div class="container" id="bioContainer">
+  <div class="card">
+    <img src="file.jpg" alt="@a_lonely_ooo" class="profile-pic" />
+    <h1>@a_lonely_ooo</h1>
+    <p>Hi! I'm Jayansh — a creative tech lover who loves acquiring systems, websites, and hacking tools. I'm a member of many ethical and non-ethical hacking communities</p>
+
+    <div class="info-box">
+      <h2>About Me</h2>
+      <ul>
+        <li><strong>Country:</strong> India</li>
+        <li><strong>Date of Birth:</strong> <span id="dob">01/01</span></li>
+        <li><strong>Hobbies:</strong> Coding, Gaming, Designing, Pentesting</li>
+        <li><strong>Portfolio:</strong> <a href="https://github.com/a-lonely-ooo/" target="_blank">github.com/a-lonely-ooo</a></li>
+        <li><strong>Handle:</strong> @a_lonely_ooo</li>
+       
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h2>Skills</h2>
+      <ul>
+        <li>PHP & Python Bots</li>
+        <li>HTML, CSS, JS</li>
+        <li>Hacking</li>
+        <li>Web UI/UX Design</li>
+        <li>Automation Systems</li>
+        <li>Social Engineering</li>
+        <li>Pentesting</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h2>Experience</h2>
+      <ul>
+        <li>3 years experience of hacking in Shadow Protocol</li>
+        <li>2 years experience as a Python developer in Akatsuki Hacking Community</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h2>Projects</h2>
+      <ul>
+        <li><a href="projects.html" class="telegram-btn" target="_blank">My Portfolio</a></li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h2>How to Contact Me</h2>
+      <ul class="contact-buttons" style="list-style: none; padding: 0;">
+        <li><a href="https://github.com/a-lonely-ooo/" class="telegram-btn" target="_blank">Portfolio</a></li>
+        <li><a href="https://instagram.com/a_lonely_ooo" class="telegram-btn" target="_blank">Insta</a></li>
+        <li><a href="https://t.me/a_lonely_ooo" class="telegram-btn" target="_blank">TeleG.</a></li>
+        <li><a href="https://twitter.com/a_lonely_ooo" class="telegram-btn" target="_blank">Twitter</a></li>
+        <li><a href="https://github.com/a-lonely-ooo" class="telegram-btn" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+
+    <a href="https://t.me/a_lonely_ooo" class="telegram-btn" target="_blank">Ask me for any type of help</a>
+  </div>
+
+  <footer style="
+    position: fixed;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 0.9em;
+    color: #ccc;
+    z-index: 10;
+    pointer-events: none;
+  ">© 2025 @a_lonely_ooo. All rights reserved.</footer>
+</div>
+
+<!-- Made By -->
+<div class="made-by">Made by @a_lonely_ooo</div>
+
+<!-- Custom UI Container -->
+<div class="custom-ui-container" id="customUiContainer">
+  <span class="custom-ui-text">If you also want to make your custom BIO</span>
+  <a href="https://t.me/a_lonely_ooo" target="_blank" class="custom-ui-btn">Click me</a>
+</div>
+
+<audio id="bdaySong" src="song.mp3" preload="auto"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/js-confetti@0.11.0/dist/js-confetti.browser.js"></script>
+<script>
+  function formatDateNoYear(date) {
+    return date.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' });
+  }
+
+  function formatDate(date) {
+    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const dob = new Date('2010-06-17'); // 🎂 Update to Jayansh's DOB (e.g., '2000-MM-DD')
+    const today = new Date();
+
+    const dobEl = document.getElementById('dob');
+    const song = document.getElementById('bdaySong');
+    const muteBtn = document.getElementById('muteBtn');
+    const birthdaySplash = document.getElementById('birthdaySplash');
+    const bioContainer = document.getElementById('bioContainer');
+    const customUiContainer = document.getElementById('customUiContainer');
+
+    // Format DOB without year
+    dobEl.textContent = formatDateNoYear(dob);
+
+    // Birthday check
+    if (dob.getDate() === today.getDate() && dob.getMonth() === today.getMonth()) {
+      // Show splash screen, hide bio
+      birthdaySplash.style.display = 'flex';
+      bioContainer.style.display = 'none';
+      dobEl.textContent += " 🎉 Happy B'Day!";
+
+      // Handle splash screen click
+      birthdaySplash.addEventListener('click', () => {
+        // Hide splash, show bio
+        birthdaySplash.style.display = 'none';
+        bioContainer.style.display = 'flex';
+
+        // Play song
+        if (!song.muted) {
+          song.play().catch(error => {
+            console.error('Error playing audio:', error);
+            // Fallback: prompt user to click again
+            const fallbackPrompt = document.createElement('div');
+            fallbackPrompt.style.position = 'fixed';
+            fallbackPrompt.style.top = '50%';
+            fallbackPrompt.style.left = '50%';
+            fallbackPrompt.style.transform = 'translate(-50%, -50%)';
+            fallbackPrompt.style.background = 'rgba(0, 0, 0, 0.8)';
+            fallbackPrompt.style.padding = '20px';
+            fallbackPrompt.style.borderRadius = '10px';
+            fallbackPrompt.style.color = '#fff';
+            fallbackPrompt.style.fontSize = '1.2em';
+            fallbackPrompt.style.zIndex = '2000';
+            fallbackPrompt.style.cursor = 'pointer';
+            fallbackPrompt.textContent = 'Click here to start the birthday song! 🎉';
+            document.body.appendChild(fallbackPrompt);
+
+            const tryPlay = () => {
+              if (!song.muted) {
+                song.play().then(() => {
+                  fallbackPrompt.remove();
+                }).catch(err => console.error('Fallback play error:', err));
+              }
+            };
+            fallbackPrompt.addEventListener('click', tryPlay, { once: true });
+          });
+        }
+
+        // Initialize confetti
+        const jsConfetti = new JSConfetti();
+        let confettiCount = 0;
+        const maxConfettiBursts = 4; // Burst 4 times
+        const confettiInterval = setInterval(() => {
+          if (confettiCount < maxConfettiBursts) {
+            jsConfetti.addConfetti({
+              confettiRadius: 6,
+              confettiNumber: 500,
+              confettiColors: ['#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#ff9bb9', '#ffbfd2'],
+            });
+            confettiCount++;
+          } else {
+            clearInterval(confettiInterval); // Stop confetti after 4 bursts
+          }
+        }, 2000); // Burst every 2 seconds
+        setTimeout(() => clearInterval(confettiInterval), 8000); // Ensure stopping after 8 seconds
+      }, { once: true });
+    } else {
+      // Show bio directly on non-birthday days
+      bioContainer.style.display = 'flex';
+    }
+
+    // Mute button functionality
+    let isMuted = false;
+    muteBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      muteBtn.textContent = isMuted ? '🔇' : '🔊';
+      song.muted = isMuted;
+    });
+
+    // Scroll detection for custom UI container
+    const container = document.getElementById('bioContainer');
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight;
+      const clientHeight = container.clientHeight;
+      // Show container when scrolled to bottom (within 10px)
+      if (scrollHeight - scrollTop - clientHeight < 10) {
+        customUiContainer.classList.add('visible');
+      } else {
+        customUiContainer.classList.remove('visible');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
